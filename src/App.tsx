@@ -1,11 +1,11 @@
-import { User } from "./components/context/User";
 import { UserContextProvider } from "./components/context/UserContextProvider";
+import { Header } from "./components/Header";
 
 function App() {
   return (
     <>
       <UserContextProvider>
-        <User />
+        <Header />
       </UserContextProvider>
     </>
   );
