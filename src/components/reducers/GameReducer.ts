@@ -1,4 +1,4 @@
-import { type GameAction, type GameState } from "./Game.types";
+import { type GameAction, type GameState } from "../types/Game.types";
 
 export const initialGameState: GameState = {
   hobbits: 0,
@@ -12,6 +12,11 @@ export const gameReducer = (
   action: GameAction,
 ): GameState => {
   switch (action.type) {
+    case "SET_UPGRADES":
+      return {
+        ...state,
+        upgrades: action.payload,
+      };
     default:
       return state;
   }

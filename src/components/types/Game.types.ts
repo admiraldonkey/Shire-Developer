@@ -19,6 +19,16 @@ export type GameState = {
 export type GameAction =
   | { type: "CLICK_HOBBIT" }
   | { type: "BUY_UPGRADE"; payload: number }
+  | { type: "SET_UPGRADES"; payload: Upgrade[] }
   | { type: "LOAD_GAME"; payload: GameState }
   | { type: "SAVE_GAME"; payload: GameState }
   | { type: "TICK" };
+
+export type GameContextType = {
+  state: GameState;
+  dispatch: React.Dispatch<GameAction>;
+};
+
+export type GameContextProviderProps = {
+  children: React.ReactNode;
+};

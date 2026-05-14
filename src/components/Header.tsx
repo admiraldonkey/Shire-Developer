@@ -1,13 +1,12 @@
-import { User } from "./context/User";
-import { useContext } from "react";
-import { UserContext } from "./context/Contexts";
 import { Counter } from "./Counter";
+import { useUserState } from "./hooks/UseUser";
 export const Header = () => {
-  const userContext = useContext(UserContext);
+  const user = useUserState().currentUser;
   return (
     <div>
-      {userContext.user ? <Counter /> : 0}
-      <User />
+      <p>Header successfully rendered</p>
+      <p>Logged in user's name is {user?.name}</p>
+      <Counter />
     </div>
   );
 };

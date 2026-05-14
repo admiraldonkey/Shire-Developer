@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import { UserContext } from "./Contexts";
-import { type User, type UserContextProviderProps } from "./User.types";
+import { userReducer, initialUserState } from "../reducers/UserReducer";
+import { type UserContextProviderProps } from "../types/User.types";
 
-export const UserContextProvider = ({ children }: UserContextProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+export const UserProvider = ({ children }: UserContextProviderProps) => {
+  const [state, dispatch] = useReducer(userReducer, initialUserState);
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ state, dispatch }}>
       {children}
     </UserContext.Provider>
   );
