@@ -10,3 +10,5 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     </UserContext.Provider>
   );
 };
+
+// Consider adding theme to user context (and save to local storage)

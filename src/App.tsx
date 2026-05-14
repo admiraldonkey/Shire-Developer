@@ -1,11 +1,14 @@
-import { UserContextProvider } from "./components/context/UserContextProvider";
+import { GameProvider } from "./components/context/GameProvider";
+import { UserContextProvider } from "./components/context/UserProvider";
 import { Header } from "./components/Header";
 
 function App() {
   return (
     <>
       <UserContextProvider>
-        <Header />
+        <GameProvider>
+          <Header />
+        </GameProvider>
       </UserContextProvider>
     </>
   );
