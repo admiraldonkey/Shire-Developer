@@ -1,16 +1,29 @@
 import { GameProvider } from "./components/context/GameProvider";
-import { UserContextProvider } from "./components/context/UserProvider";
+import { UserProvider } from "./components/context/UserProvider";
 import { Header } from "./components/Header";
+import { useUserState } from "./components/hooks/UseUser";
+import { SplashScreen } from "./components/SplashScreen";
+import { Upgrades } from "./components/Upgrades";
+
+function AppContent() {
+  const { currentUser } = useUserState();
+
+  if (!currentUser) {
+    return <SplashScreen />;
+  }
+  return (
+    <GameProvider>
+      <Header />
+      <Upgrades />
+    </GameProvider>
+  );
+}
 
 function App() {
   return (
-    <>
-      <UserContextProvider>
-        <GameProvider>
-          <Header />
-        </GameProvider>
-      </UserContextProvider>
-    </>
+    <UserProvider>
+      <AppContent />
+    </UserProvider>
   );
 }
 

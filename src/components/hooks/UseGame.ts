@@ -1,18 +1,18 @@
 import { useContext } from "react";
-import { GameDispatchContext, GameStateContext } from "../context/Contexts";
+import { GameContext } from "../context/Contexts";
 
 export const useGameState = () => {
-  const context = useContext(GameStateContext);
+  const context = useContext(GameContext);
   if (!context) {
     throw new Error("useGameState must be used inside GameProvider");
   }
-  return context;
+  return context.state;
 };
 
 export const useGameDispatch = () => {
-  const context = useContext(GameDispatchContext);
+  const context = useContext(GameContext);
   if (!context) {
     throw new Error("useGameDispatch must be used inside GameProvider");
   }
-  return context;
+  return context.dispatch;
 };
