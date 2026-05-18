@@ -34,7 +34,7 @@ const saveGameToStorage = (
 // Readme outlines why game state & dispatch were combined into a single provider
 export const GameProvider = ({ children }: GameContextProviderProps) => {
   const user = useUserState().currentUser;
-  console.log("user in GameProvider is: ", user);
+  // console.log("user in GameProvider is: ", user);
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
 
   useEffect(() => {

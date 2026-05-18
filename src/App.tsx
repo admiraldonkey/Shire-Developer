@@ -2,6 +2,7 @@ import { GameProvider } from "./components/context/GameProvider";
 import { UserProvider } from "./components/context/UserProvider";
 import { Header } from "./components/Header";
 import { useUserState } from "./components/hooks/UseUser";
+import { Options } from "./components/Options";
 import { SplashScreen } from "./components/SplashScreen";
 import { Upgrades } from "./components/Upgrades";
 
@@ -15,6 +16,7 @@ function AppContent() {
     <GameProvider>
       <Header />
       <Upgrades />
+      <Options />
     </GameProvider>
   );
 }
