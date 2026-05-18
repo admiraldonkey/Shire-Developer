@@ -18,11 +18,12 @@ export type GameState = {
 
 export type GameAction =
   | { type: "CLICK_HOBBIT" }
-  | { type: "BUY_UPGRADE"; payload: number }
+  | { type: "TICK" }
   | { type: "SET_UPGRADES"; payload: Upgrade[] }
+  | { type: "BUY_UPGRADE"; payload: number }
+  | { type: "CHEAT" }
   | { type: "LOAD_GAME"; payload: GameState }
-  | { type: "SAVE_GAME"; payload: GameState }
-  | { type: "TICK" };
+  | { type: "RESET" };
 
 export type GameContextType = {
   state: GameState;
