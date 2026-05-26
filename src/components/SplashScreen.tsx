@@ -67,6 +67,7 @@ export const SplashScreen = () => {
         }}
       />
       <Fireflies />
+      {/* Hills overlay */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-[3]">
         <svg
           viewBox="0 0 1440 320"
@@ -80,6 +81,7 @@ export const SplashScreen = () => {
           />
         </svg>
       </div>
+      {/* Circle/Hobbit door effect */}
       <div
         className="
     absolute
@@ -104,6 +106,7 @@ export const SplashScreen = () => {
       <h2 className="italic font-semibold text-lg md:text-xl mt-3 text-[#d6c7a1] opacity-0 animate-h2-fall-bounce text-center px-4 z-[5]">
         A fellowship begins with good company and a full belly
       </h2>
+      {/* Form container */}
       <div
         className="
     relative
@@ -124,11 +127,7 @@ export const SplashScreen = () => {
   "
         style={{ "--delay": "3.2s" } as React.CSSProperties}
       >
-        <form
-          onSubmit={handleLogin}
-          // className="flex flex-col items-center w-full max-w-sm px-4 mt-10"
-          className="flex flex-col items-center"
-        >
+        <form onSubmit={handleLogin} className="flex flex-col items-center">
           {/* Label */}
           <span
             className="text-lg pb-3 font-medium opacity-0 animate-label-fade-in"
