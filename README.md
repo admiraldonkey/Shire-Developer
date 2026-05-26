@@ -1,15 +1,14 @@
 # Planned features:
 
-- Clicker game with state management
-- Purchasable upgrade data drawn from an API and names adjusted to suit theme
+- Clicker game with user & game state management via useReducer hooks & context providers.
+- Purchasable upgrade data drawn from an API and customised to suit theme
 - Dynamic UI as player progresses
-- Local storage to save progress
+- Players can login and independently save/load progress from local storage
 - Extensive options including theme toggles
 
 # Potential additions
 
-- Consider adding login/logout functionality to add profiles
-- Saving progress to a database in keeping with above
+- Progress saving to database or something with more permanence/cross platform utility
 
 # Comments / points to raise
 
@@ -17,5 +16,11 @@
 
 # TODO
 
-- Update upgrades component
-- Complete GameReducer switch cases
+- Move logout function & button from splash screen to options menu
+- UI setup
+- Styling
+- Accessibility with mobile-first approach
+- Component & function refactoring
+- Add music/sounds & UI themes (light/dark)
+- Player feedback (logging in, when buying upgrades, loading saved progress, etc)
+- Potentially add test cases (despite the problems with implementing vitest last time...)
