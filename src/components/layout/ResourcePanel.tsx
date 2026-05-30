@@ -7,18 +7,11 @@ import {
 } from "../../utils/gameCalculations";
 
 export function ResourcePanel() {
-  // const { hobbits, upgrades, hobbitsPerSecond, hobbitsPerClick } =
-  //   useGameState();
   const { hobbits, upgrades } = useGameState();
 
   const hobbitsPerClick = getHobbitsPerClick(upgrades);
   const hobbitsPerSecond = getHobbitsPerSecond(upgrades);
   const totalOwnedUpgrades = getTotalOwnedUpgrades(upgrades);
-
-  // const totalOwnedUpgrades = upgrades.reduce(
-  //   (total, upgrade) => total + upgrade.owned,
-  //   0,
-  // );
 
   return (
     <aside className="min-h-0 overflow-y-auto rounded-3xl border border-amber-200/20 bg-stone-900/80 p-4 shadow-2xl backdrop-blur">

@@ -9,11 +9,11 @@ export const Upgrades = () => {
   const handleUpgrade = (id: number) => {
     const upgrade = upgrades.find((u) => u.id === id);
     if (!upgrade) return;
-    if (hobbits >= upgrade.baseCost) {
+    if (hobbits >= upgrade.costNext) {
       dispatch({ type: "BUY_UPGRADE", payload: id });
     } else {
       console.log(
-        `You need another ${upgrade.baseCost - hobbits} hobbits to buy ${upgrade.name}!`,
+        `You need another ${upgrade.costNext - hobbits} hobbits to buy ${upgrade.name}!`,
       );
     }
   };
