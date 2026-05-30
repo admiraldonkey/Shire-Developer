@@ -4,10 +4,11 @@ import { GameContext } from "./Contexts";
 import {
   type GameContextProviderProps,
   type GameState,
-  type Upgrade,
-} from "../types/Game.types";
+} from "../../types/Game.types";
 import { useUserState } from "../hooks/UseUser";
-import type { User } from "../types/User.types";
+import type { User } from "../../types/User.types";
+import type { ApiUpgrade } from "../../types/Game.types";
+import { createInitialUpgrades } from "../../utils/upgradeMappers";
 
 const loadGameFromStorage = (username: string): GameState | null => {
   console.log("loading from storage...");
@@ -37,6 +38,22 @@ export const GameProvider = ({ children }: GameContextProviderProps) => {
   // console.log("user in GameProvider is: ", user);
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
 
+  // Set to true to enable hobbits per second - disabled while building & testing
+  const ENABLE_PASSIVE_TICKER = false;
+
+  useEffect(() => {
+    if (!ENABLE_PASSIVE_TICKER) {
+      return;
+    }
+    const intervalId = window.setInterval(() => {
+      dispatch({ type: "TICK_HOBBITS" });
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [ENABLE_PASSIVE_TICKER]);
+
   useEffect(() => {
     if (!user) return;
 
@@ -50,28 +67,9 @@ export const GameProvider = ({ children }: GameContextProviderProps) => {
         const response = await fetch(
           "https://cookie-upgrade-api.vercel.app/api/upgrades",
         );
-        let upgrades = await response.json();
+        const apiUpgrades: ApiUpgrade[] = await response.json();
 
-        const newUpgradeNames = [
-          "Hobbit Hole",
-          "Peace and Quiet",
-          "Good Tilled Earth",
-          "Pint of Ale",
-          "Old Toby",
-          "Bakery",
-          "Gandalf's Fireworks",
-          "Brewery",
-          "Inn",
-          "111th Birthday Party",
-        ];
-
-        upgrades = upgrades.map((u: Upgrade) => ({
-          ...u,
-          name: newUpgradeNames[u.id - 1],
-          type: "auto",
-          costNext: u.cost,
-          owned: 0,
-        }));
+        const upgrades = createInitialUpgrades(apiUpgrades);
 
         console.log("upgrades in useEffect are:", upgrades);
         dispatch({ type: "SET_UPGRADES", payload: upgrades });

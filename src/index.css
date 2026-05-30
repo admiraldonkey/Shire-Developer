@@ -330,3 +330,19 @@
 .animate-slow-pulse {
   animation: slowPulse 8s ease-in-out infinite;
 }
+
+/* =========================
+     Click Popup
+     ========================= */
+
+@keyframes float-up {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -140%) scale(1.15);
+  }
+}

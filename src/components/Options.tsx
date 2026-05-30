@@ -53,7 +53,7 @@ export const Options = () => {
 
   return (
     <div className="py-2 mb-2 ml-2">
-      <h3 className="font-bold pl-2 pb-2">Options:</h3>
+      {/* <h3 className="font-bold pl-2 pb-2">Options:</h3> */}
       <button className="border border-black-200 p-2 mx-1" onClick={handleSave}>
         Save Game
       </button>
