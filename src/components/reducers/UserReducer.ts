@@ -1,4 +1,4 @@
-import { type UserState, type UserAction } from "../types/User.types";
+import { type UserState, type UserAction } from "../../types/User.types";
 
 export const initialUserState: UserState = {
   currentUser: null,

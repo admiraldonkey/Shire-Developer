@@ -1,24 +1,38 @@
-// 2 upgrade types, 1 to upgrade click power (recruits per click) and another for automatic recruiting
+export type UpgradeCategory = "passive" | "click";
+export type UpgradeEffectType = "hobbitsPerSecond" | "hobbitsPerClick";
+
+export type ApiUpgrade = {
+  id: number;
+  name: string;
+  cost: number;
+  increase: number;
+};
+
 export type Upgrade = {
   id: number;
   name: string;
-  type: "auto" | "click";
-  cost: number;
+  description: string;
+  baseCost: number;
   costNext: number;
-  increase: number;
+  costMultiplier: number;
   owned: number;
+  category: UpgradeCategory;
+  effect: {
+    type: UpgradeEffectType;
+    value: number;
+  };
 };
 
 export type GameState = {
   hobbits: number;
   hobbitsPerSecond: number;
-  clickPower: number;
+  hobbitsPerClick: number;
   upgrades: Upgrade[];
 };
 
 export type GameAction =
   | { type: "CLICK_HOBBIT" }
-  | { type: "TICK" }
+  | { type: "TICK_HOBBITS" }
   | { type: "SET_UPGRADES"; payload: Upgrade[] }
   | { type: "BUY_UPGRADE"; payload: number }
   | { type: "CHEAT" }

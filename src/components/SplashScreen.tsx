@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useUserDispatch } from "./hooks/UseUser";
-import type { User } from "./types/User.types";
+import type { User } from "../types/User.types";
 import noise from "/textures/noise.png";
 import { Fireflies } from "./Fireflies";
 
@@ -127,7 +127,11 @@ export const SplashScreen = () => {
   "
         style={{ "--delay": "3.2s" } as React.CSSProperties}
       >
-        <form onSubmit={handleLogin} className="flex flex-col items-center">
+        <form
+          onSubmit={handleLogin}
+          className="flex flex-col items-center"
+          autoComplete="off"
+        >
           {/* Label */}
           <span
             className="text-lg pb-3 font-medium opacity-0 animate-label-fade-in"

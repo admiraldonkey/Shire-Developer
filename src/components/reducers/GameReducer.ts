@@ -1,9 +1,13 @@
-import { type GameAction, type GameState } from "../types/Game.types";
+import { type GameAction, type GameState } from "../../types/Game.types";
+import {
+  getHobbitsPerClick,
+  getHobbitsPerSecond,
+} from "../../utils/gameCalculations";
 
 export const initialGameState: GameState = {
   hobbits: 0,
   hobbitsPerSecond: 0,
-  clickPower: 1,
+  hobbitsPerClick: 1,
   upgrades: [],
 };
 
@@ -12,50 +16,57 @@ export const gameReducer = (
   action: GameAction,
 ): GameState => {
   switch (action.type) {
-    // 'Recruit' button clicked. Increases hobbits value by current clickPower (1 by default)
-    case "CLICK_HOBBIT":
-      return { ...state, hobbits: state.hobbits + state.clickPower };
-    // Hobbit value increases by hobbitsPerSecond value every second (1000ms). Dispatched from useEffect interval in Counter component.
-    case "TICK":
+    // 'Recruit' button clicked. Increases hobbits value by current hobbitsPerClick (1 by default)
+    case "CLICK_HOBBIT": {
+      // return { ...state, hobbits: state.hobbits + state.hobbitsPerClick };
+      const hobbitsPerClick = getHobbitsPerClick(state.upgrades);
       return {
         ...state,
-        hobbits: state.hobbits + state.hobbitsPerSecond,
+        hobbits: state.hobbits + hobbitsPerClick,
       };
+    }
+    // Hobbit value increases by hobbitsPerSecond value every second (1000ms). Dispatched from useEffect interval in Counter component.
+    case "TICK_HOBBITS": {
+      const hobbitsPerSecond = getHobbitsPerSecond(state.upgrades);
+      if (hobbitsPerSecond === 0) {
+        return state;
+      }
+      return {
+        ...state,
+        hobbits: state.hobbits + hobbitsPerSecond,
+      };
+    }
     // Upgrades pulled from API or from local storage are used to update upgrades in game state.
     case "SET_UPGRADES":
       return {
         ...state,
         upgrades: action.payload,
       };
+
     // Handles logic when a user buys an upgrade (only dispatches if player has enough to cover cost)
     case "BUY_UPGRADE": {
-      // ID of purchased upgrade is sent as payload
-      const upgradeId = action.payload;
-      let upgradePrice = 0;
-      let upgradeHps = 0;
+      const upgradeToBuy = state.upgrades.find(
+        (upgrade) => upgrade.id === action.payload,
+      );
 
-      // Map through upgrades, return those not matching bought upgrade.
-      // When matching upgrade is found, save its cost & hobbit per second increase value to variables for updating their states.
-      const updatedUpgrades = state.upgrades.map((u) => {
-        if (u.id !== upgradeId) return u;
+      if (!upgradeToBuy || state.hobbits < upgradeToBuy.costNext) {
+        return state;
+      }
 
-        upgradePrice = u.cost;
-        upgradeHps = u.increase;
-        // Update purchased upgrade with amount owned, increase cost and subsequent purchase price.
-        return {
-          ...u,
-          owned: u.owned + 1,
-          cost: u.cost + u.costNext,
-          costNext: Math.round(u.costNext * 1.2), // Rounded to keep costs & UI simple
-        };
-      });
-
-      // Update game state to reflect purchase, deduct price from current hobbits & increase hobbits per second value by the bought upgrade's increase amount.
       return {
         ...state,
-        hobbits: state.hobbits - upgradePrice,
-        hobbitsPerSecond: state.hobbitsPerSecond + upgradeHps,
-        upgrades: updatedUpgrades,
+        hobbits: state.hobbits - upgradeToBuy.costNext,
+        upgrades: state.upgrades.map((upgrade) => {
+          if (upgrade.id !== action.payload) {
+            return upgrade;
+          }
+
+          return {
+            ...upgrade,
+            owned: upgrade.owned + 1,
+            costNext: Math.ceil(upgrade.costNext * upgrade.costMultiplier),
+          };
+        }),
       };
     }
 

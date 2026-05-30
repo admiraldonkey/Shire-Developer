@@ -1,5 +1,5 @@
 import { useGameDispatch, useGameState } from "./hooks/UseGame";
-import type { Upgrade } from "./types/Game.types";
+import type { Upgrade } from "../types/Game.types";
 
 export const Upgrades = () => {
   const upgrades = useGameState().upgrades;
@@ -9,11 +9,11 @@ export const Upgrades = () => {
   const handleUpgrade = (id: number) => {
     const upgrade = upgrades.find((u) => u.id === id);
     if (!upgrade) return;
-    if (hobbits >= upgrade.cost) {
+    if (hobbits >= upgrade.costNext) {
       dispatch({ type: "BUY_UPGRADE", payload: id });
     } else {
       console.log(
-        `You need another ${upgrade.cost - hobbits} hobbits to buy ${upgrade.name}!`,
+        `You need another ${upgrade.costNext - hobbits} hobbits to buy ${upgrade.name}!`,
       );
     }
   };
@@ -32,8 +32,8 @@ export const Upgrades = () => {
                 >
                   {upgrade.name}
                 </button>
-                <p>Buy Cost: {upgrade.cost}</p>
-                <p>Hobbits Per Second: {upgrade.increase}</p>
+                <p>Buy Cost: {upgrade.costNext}</p>
+                <p>Hobbits Per Second: {upgrade.effect.value}</p>
                 <p>Owned: {upgrade.owned}</p>
               </div>
             );
