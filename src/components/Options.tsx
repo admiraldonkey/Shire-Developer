@@ -54,26 +54,32 @@ export const Options = () => {
   return (
     <div className="py-2 mb-2 ml-2">
       {/* <h3 className="font-bold pl-2 pb-2">Options:</h3> */}
-      <button className="border border-black-200 p-2 mx-1" onClick={handleSave}>
+      <button
+        className="rounded-lg border border-amber-200/30 px-3 py-2 text-sm text-amber-100 hover:bg-amber-100/10"
+        onClick={handleSave}
+      >
         Save Game
       </button>
-      <button className="border border-black-200 p-2 mx-1" onClick={handleLoad}>
+      <button
+        className="rounded-lg border border-amber-200/30 px-3 py-2 text-sm text-amber-100 hover:bg-amber-100/10"
+        onClick={handleLoad}
+      >
         Load Game
       </button>
       <button
-        className="border border-black-200 p-2 mx-1"
+        className="rounded-lg border border-amber-200/30 px-3 py-2 text-sm text-amber-100 hover:bg-amber-100/10"
         onClick={handleThemeChange}
       >
         {currentUser?.theme === "dark" ? "Light Mode" : "Dark Mode"}
       </button>
       <button
-        className="border border-black-200 p-2 mx-1"
+        className="rounded-lg border border-amber-200/30 px-3 py-2 text-sm text-amber-100 hover:bg-amber-100/10"
         onClick={handleCheat}
       >
         Add 10000 hobbits
       </button>
       <button
-        className="border border-black-200 p-2 mx-1"
+        className="rounded-lg border border-amber-200/30 px-3 py-2 text-sm text-amber-100 hover:bg-amber-100/10"
         onClick={handleDeleteUser}
       >
         Delete User

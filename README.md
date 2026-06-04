@@ -24,3 +24,9 @@
 - Add music/sounds & UI themes (light/dark)
 - Player feedback (logging in, when buying upgrades, loading saved progress, etc)
 - Potentially add test cases (despite the problems with implementing vitest last time...)
+
+- Fix theme switch reloading last saved state (overwriting unsaved progress)
+- Fix click feedback only showing +1 regardless of per click value
+- Add proper upgrade cards
+- Upgrades need to display text based on type (currently all say hps/passive)
+- Keyboard interactivity - users should be able to recruit by using spacebar or click
