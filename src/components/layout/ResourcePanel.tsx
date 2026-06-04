@@ -14,12 +14,12 @@ export function ResourcePanel() {
   const totalOwnedUpgrades = getTotalOwnedUpgrades(upgrades);
 
   return (
-    <aside className="min-h-0 overflow-y-auto rounded-3xl border border-amber-200/20 bg-stone-900/80 p-4 shadow-2xl backdrop-blur">
-      <h2 className="mb-4 text-lg font-semibold text-amber-100">
+    <aside className="rounded-3xl border border-amber-200/20 bg-stone-900/80 p-4 shadow-2xl backdrop-blur lg:p-5">
+      <h2 className="mb-3 text-lg font-semibold text-amber-100 lg:mb-4">
         Shire Ledger
       </h2>
 
-      <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 lg:gap-4">
         <StatCard
           label="Hobbits"
           value={Math.floor(hobbits).toLocaleString()}

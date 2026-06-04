@@ -39,7 +39,7 @@ export const GameProvider = ({ children }: GameContextProviderProps) => {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
 
   // Set to true to enable hobbits per second - disabled while building & testing
-  const ENABLE_PASSIVE_TICKER = false;
+  const ENABLE_PASSIVE_TICKER = true;
 
   useEffect(() => {
     if (!ENABLE_PASSIVE_TICKER) {

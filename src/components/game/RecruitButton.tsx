@@ -10,6 +10,7 @@ export function RecruitButton() {
 
   function handleRecruit(event: React.MouseEvent<HTMLButtonElement>) {
     dispatch({ type: "CLICK_HOBBIT" });
+    console.log(hobbitsPerClick);
 
     const buttonRect = event.currentTarget.getBoundingClientRect();
 
@@ -32,7 +33,12 @@ export function RecruitButton() {
       <button
         type="button"
         onClick={handleRecruit}
-        className="relative h-48 w-48 rounded-full border-4 border-amber-300/50 bg-green-900 shadow-2xl shadow-amber-950/50 transition hover:scale-105 hover:border-amber-200 active:scale-95"
+        className={[
+          "relative rounded-full border-4 border-amber-300/50 bg-green-900",
+          "h-40 w-40 sm:h-48 sm:w-48 lg:h-52 lg:w-52",
+          "shadow-2xl shadow-amber-950/50 transition",
+          "hover:scale-105 active:scale-95",
+        ].join(" ")}
       >
         <span className="block text-lg font-bold text-amber-100">
           Recruit Hobbit
