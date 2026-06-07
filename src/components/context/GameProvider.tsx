@@ -6,45 +6,49 @@ import {
   type GameState,
 } from "../../types/Game.types";
 import { useUserState } from "../hooks/UseUser";
-import type { User } from "../../types/User.types";
 import type { ApiUpgrade } from "../../types/Game.types";
 import { createInitialUpgrades } from "../../utils/upgradeMappers";
 
+const ENABLE_PASSIVE_TICKER = true;
+
 const loadGameFromStorage = (username: string): GameState | null => {
   console.log("loading from storage...");
+
   const data = localStorage.getItem(username);
+
   console.log("retrieved data is: ", data);
+
   if (!data) return null;
-  const parsed = JSON.parse(data);
-  return parsed.gameState || null;
+
+  try {
+    const parsed = JSON.parse(data);
+    return parsed.gameState || null;
+  } catch (error) {
+    console.error("Failed to parse saved game:", error);
+    return null;
+  }
 };
 
-const saveGameToStorage = (
-  username: string,
-  gameState: GameState,
-  // userData: Record<string, unknown>,
-  userData: User,
-) => {
+const saveGameToStorage = (username: string, gameState: GameState) => {
   const storageObj = {
-    ...userData,
     gameState,
   };
+
   localStorage.setItem(username, JSON.stringify(storageObj));
 };
 
 // Readme outlines why game state & dispatch were combined into a single provider
 export const GameProvider = ({ children }: GameContextProviderProps) => {
   const user = useUserState().currentUser;
-  // console.log("user in GameProvider is: ", user);
-  const [state, dispatch] = useReducer(gameReducer, initialGameState);
+  const username = user?.name;
 
-  // Set to true to enable hobbits per second - disabled while building & testing
-  const ENABLE_PASSIVE_TICKER = true;
+  const [state, dispatch] = useReducer(gameReducer, initialGameState);
 
   useEffect(() => {
     if (!ENABLE_PASSIVE_TICKER) {
       return;
     }
+
     const intervalId = window.setInterval(() => {
       dispatch({ type: "TICK_HOBBITS" });
     }, 1000);
@@ -52,33 +56,50 @@ export const GameProvider = ({ children }: GameContextProviderProps) => {
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [ENABLE_PASSIVE_TICKER]);
+  }, []);
 
   useEffect(() => {
-    if (!user) return;
+    if (!username) return;
 
-    const saved = loadGameFromStorage(user.name);
+    const activeUsername = username;
+
+    const saved = loadGameFromStorage(activeUsername);
+
     if (saved) {
       console.log("User was pulled from storage");
       dispatch({ type: "LOAD_GAME", payload: saved });
-    } else {
-      console.log("user did not exist in storage");
-      async function fetchUpgrades() {
+      return;
+    }
+
+    console.log("user did not exist in storage");
+
+    async function fetchUpgrades() {
+      try {
         const response = await fetch(
           "https://cookie-upgrade-api.vercel.app/api/upgrades",
         );
-        const apiUpgrades: ApiUpgrade[] = await response.json();
 
+        if (!response.ok) {
+          throw new Error(`Upgrade API failed with status ${response.status}`);
+        }
+
+        const apiUpgrades: ApiUpgrade[] = await response.json();
         const upgrades = createInitialUpgrades(apiUpgrades);
 
-        console.log("upgrades in useEffect are:", upgrades);
-        dispatch({ type: "SET_UPGRADES", payload: upgrades });
+        const newGameState = {
+          ...initialGameState,
+          upgrades,
+        };
 
-        saveGameToStorage(user!.name, { ...initialGameState, upgrades }, user!);
+        dispatch({ type: "LOAD_GAME", payload: newGameState });
+        saveGameToStorage(activeUsername, newGameState);
+      } catch (error) {
+        console.error("Failed to initialise upgrades:", error);
       }
-      fetchUpgrades();
     }
-  }, [user]);
+
+    fetchUpgrades();
+  }, [username]);
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>

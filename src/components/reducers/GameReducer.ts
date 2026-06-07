@@ -17,7 +17,7 @@ export const gameReducer = (
 ): GameState => {
   switch (action.type) {
     // 'Recruit' button clicked. Increases hobbits value by current hobbitsPerClick (1 by default)
-    case "CLICK_HOBBIT": {
+    case "CLICK_HOBBITS": {
       // return { ...state, hobbits: state.hobbits + state.hobbitsPerClick };
       const hobbitsPerClick = getHobbitsPerClick(state.upgrades);
       return {

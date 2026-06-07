@@ -15,10 +15,6 @@ export const userReducer = (
     // Clears current user state
     case "LOGOUT":
       return { currentUser: null };
-    // Changes the user's choice of UI theme
-    case "SET_THEME":
-      if (!state.currentUser) return state;
-      return { currentUser: { ...state.currentUser, theme: action.payload } };
     // User data has been deleted, user state returns to default
     case "DELETE":
       return initialUserState;
