@@ -58,16 +58,6 @@ export function TopBar() {
     setIsMenuOpen(false);
   }
 
-  function handleThemeChange() {
-    if (currentUser) {
-      const newTheme = currentUser.theme === "dark" ? "light" : "dark";
-      dispatchUser({ type: "SET_THEME", payload: newTheme });
-    } else {
-      console.log("User not found");
-    }
-    setIsMenuOpen(false);
-  }
-
   function handleAddHobbits() {
     dispatchGame({ type: "CHEAT" });
     setIsMenuOpen(false);
@@ -124,9 +114,6 @@ export function TopBar() {
             >
               <MenuButton onClick={handleSaveGame}>Save Game</MenuButton>
               <MenuButton onClick={handleLoadGame}>Load Game</MenuButton>
-              <MenuButton onClick={handleThemeChange}>
-                Toggle Dark Mode
-              </MenuButton>
 
               <div className="my-2 border-t border-amber-200/10" />
 

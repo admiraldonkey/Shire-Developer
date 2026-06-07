@@ -32,7 +32,6 @@ export const SplashScreen = () => {
     } else {
       const newUser: User = {
         name: trimmedName,
-        theme: "light",
       };
 
       dispatch({

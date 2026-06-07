@@ -2,7 +2,6 @@ import type React from "react";
 
 export type User = {
   name: string;
-  theme: "light" | "dark";
 };
 
 export type UserState = {
@@ -12,7 +11,6 @@ export type UserState = {
 export type UserAction =
   | { type: "SET_USER"; payload: User }
   | { type: "LOGOUT" }
-  | { type: "SET_THEME"; payload: "light" | "dark" }
   | { type: "DELETE" };
 
 export type UserContextType = {

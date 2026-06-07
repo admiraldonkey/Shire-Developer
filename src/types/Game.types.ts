@@ -31,7 +31,7 @@ export type GameState = {
 };
 
 export type GameAction =
-  | { type: "CLICK_HOBBIT" }
+  | { type: "CLICK_HOBBITS" }
   | { type: "TICK_HOBBITS" }
   | { type: "SET_UPGRADES"; payload: Upgrade[] }
   | { type: "BUY_UPGRADE"; payload: number }

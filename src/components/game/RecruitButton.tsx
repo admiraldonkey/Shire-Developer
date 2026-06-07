@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useGameDispatch, useGameState } from "../hooks/UseGame";
 import type { ClickPopup } from "../../types/UI.types";
+import { getHobbitsPerClick } from "../../utils/gameCalculations";
 
 export function RecruitButton() {
-  const { hobbitsPerClick } = useGameState();
+  const { upgrades } = useGameState();
   const dispatch = useGameDispatch();
+
+  const hobbitsPerClick = getHobbitsPerClick(upgrades);
 
   const [popups, setPopups] = useState<ClickPopup[]>([]);
 
   function handleRecruit(event: React.MouseEvent<HTMLButtonElement>) {
-    dispatch({ type: "CLICK_HOBBIT" });
+    dispatch({ type: "CLICK_HOBBITS" });
     console.log(hobbitsPerClick);
 
     const buttonRect = event.currentTarget.getBoundingClientRect();
