@@ -1,28 +1,64 @@
-# Planned features:
+# Hobbit Recruitment Agency
 
-- Clicker game with user & game state management via useReducer hooks & context providers.
-- Purchasable upgrade data drawn from an API and customised to suit theme
-- Dynamic UI as player progresses
-- Players can login and independently save/load progress from local storage
-- Extensive options including theme toggles
+### Part of the Shire Redevelopment Initiative
 
-# Potential additions
+A themed incremental web game built with React, TypeScript, and Tailwind, where players recruit hobbits, purchase upgrades, and help restore the Shire after the Scouring.
 
-- Progress saving to database or something with more permanence/cross platform utility
+## Premise
 
-# Comments / points to raise
+Reeling from the damage caused by Sharkey and his ruffian allies, the Shire lies scarred by ruin and corruption. Many brave hobbits were killed or wounded at the Battle of Bywater, and the work of restoration has only just begun.
 
-- For larger applications, it may make sense to split GameState and GameDispatch into separate providers. This would allow components that only dispatch actions to run without triggering unnecessary re-renders. As this is a small app, the decision was made to combine them into one GameContext provider to keep things simpler and easier to read.
+Will you help rebuild what was lost and bring comfort, peace, and prosperity back to the Shire?
 
-# TODO
+## Current Features
 
-- UI setup
-- Styling
-- Accessibility with mobile-first approach
-- Component & function refactoring
-- Add music/sounds & UI dynamic UI dependent on progress
-- Player feedback (logging in, when buying upgrades, loading saved progress, etc)
-- Potentially add test cases (despite the problems with implementing vitest last time...)
-- Add proper upgrade cards
-- Upgrades need to display text based on type (currently all say hps/passive)
-- Keyboard interactivity - users should be able to recruit by using spacebar or click
+- React, TypeScript, and Tailwind front end
+- Reducer-driven game state with Context architecture
+- User-specific localStorage saves
+- API upgrade data transformed into strongly typed game models
+- Passive and click-based upgrade effects
+- Responsive upgrade card deck
+- Mobile-friendly layout with touch-friendly upgrade carousel
+- Interactive click feedback for player actions
+- Collapsible/overlay upgrade drawer
+- Options menu for save/load/testing actions
+
+## In Progress
+
+- Upgrade deck keyboard navigation
+- Keyboard-first interaction
+- Improved purchase feedback
+- Chronicle/event panel
+- Restoration stages to drive dynamic UI changes
+- Full visual polish: cards, textures, typography, atmosphere, and artwork
+- Accessibility-minded design, with ongoing WCAG-focused improvements
+
+## Planned Features
+
+- Dynamic visual progression as the Shire is restored
+- Themed Chronicle entries and milestone messages
+- Sound and music options
+- Reduced motion / accessibility settings
+- Planned support for mouse, keyboard, and touch interaction
+- Component and utility test coverage
+
+## Future Considerations
+
+- Cloud persistence / cross-device saves
+
+## Comments / points to raise
+
+For a larger application, it may make sense to split game state and dispatch into separate providers. This would allow components that only dispatch actions to avoid re-rendering when state changes. For this project, game state and dispatch are currently combined in one GameContext provider to keep the architecture simpler and easier to follow.
+
+## Development Checklist
+
+- Test new and existing user flows
+- Test click and passive income behaviour
+- Test passive and click upgrade purchases
+- Test save/load/reset behaviour
+- Test mobile and desktop layouts
+- Continue refactoring components and utility functions as features stabilise
+
+## Additional
+
+Further planning notes and future feature ideas are tracked in `docs/roadmap.md`.
