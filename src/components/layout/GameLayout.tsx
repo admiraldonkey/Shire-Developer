@@ -1,4 +1,5 @@
 import { useState } from "react";
+// import { useUserState } from "../hooks/UseUser";
 import { TopBar } from "./TopBar";
 import { ResourcePanel } from "./ResourcePanel";
 import { MainActionPanel } from "./MainActionPanel";
@@ -6,7 +7,14 @@ import { UpgradeDrawer } from "./UpgradeDrawer";
 import { ChroniclePanel } from "./ChroniclePanel";
 
 export function GameLayout() {
-  const [isUpgradePanelOpen, setIsUpgradePanelOpen] = useState(true);
+  const [isUpgradePanelOpen, setIsUpgradePanelOpen] = useState(false);
+  // const { currentUser } = useUserState();
+
+  // useEffect(() => {
+  //   setIsUpgradePanelOpen(false);
+  // }, [currentUser?.name]);
+
+  // ^^ Fix above once switch user button has been implemented
 
   return (
     <main className="h-screen overflow-hidden bg-stone-950 text-amber-50">
