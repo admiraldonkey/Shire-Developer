@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGameDispatch, useGameState } from "../hooks/UseGame";
 import { UpgradeCard } from "./UpgradeCard";
-// import type { UpgradeCategory } from "../../types/Game.types";
+import type { Upgrade } from "../../types/Game.types";
 
 const UPGRADE_FILTERS = ["all", "passive", "click"] as const;
 
 type UpgradeFilter = (typeof UPGRADE_FILTERS)[number];
 type FocusRegion = "deck" | "filters" | "none";
+type UpgradePanelProps = {
+  onUpgradePurchased: (cost: number) => void;
+};
 
-export function UpgradePanel() {
+export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
   const { hobbits, upgrades } = useGameState();
   const dispatch = useGameDispatch();
 
@@ -18,6 +21,31 @@ export function UpgradePanel() {
   );
   const [focusedRegion, setFocusedRegion] = useState<FocusRegion>("deck");
 
+  type DeckNotice = {
+    id: number;
+    type: "success" | "warning";
+    message: string;
+  };
+
+  type RecentPurchase = {
+    id: number;
+    upgradeId: number;
+    count: number;
+  };
+
+  const [deckNotice, setDeckNotice] = useState<DeckNotice | null>(null);
+  const [recentPurchase, setRecentPurchase] = useState<RecentPurchase | null>(
+    null,
+  );
+
+  type MobileSpendFeedback = {
+    id: number;
+    amount: number;
+  };
+
+  const [mobileSpendFeedback, setMobileSpendFeedback] =
+    useState<MobileSpendFeedback | null>(null);
+
   const desktopCardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const mobileCardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const mobileCarouselRef = useRef<HTMLDivElement | null>(null);
@@ -25,6 +53,10 @@ export function UpgradePanel() {
   const panelRef = useRef<HTMLElement | null>(null);
 
   const filterButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  const feedbackIdRef = useRef(0);
+
+  const recentPurchaseTimeoutRef = useRef<number | null>(null);
 
   const visibleUpgrades = useMemo(() => {
     if (selectedFilter === "all") {
@@ -234,14 +266,90 @@ export function UpgradePanel() {
     };
   }
 
+  function getNextFeedbackId() {
+    feedbackIdRef.current += 1;
+    return feedbackIdRef.current;
+  }
+
+  function showDeckNotice(type: DeckNotice["type"], message: string) {
+    const notice: DeckNotice = {
+      id: getNextFeedbackId(),
+      type,
+      message,
+    };
+
+    setDeckNotice(notice);
+
+    window.setTimeout(() => {
+      setDeckNotice((current) => (current?.id === notice.id ? null : current));
+    }, 1600);
+  }
+
+  function showRecentPurchase(upgradeId: number) {
+    const purchaseId = getNextFeedbackId();
+
+    setRecentPurchase((current) => {
+      const isSameUpgrade = current?.upgradeId === upgradeId;
+
+      return {
+        id: purchaseId,
+        upgradeId,
+        count: isSameUpgrade ? current.count + 1 : 1,
+      };
+    });
+
+    if (recentPurchaseTimeoutRef.current !== null) {
+      window.clearTimeout(recentPurchaseTimeoutRef.current);
+    }
+
+    recentPurchaseTimeoutRef.current = window.setTimeout(() => {
+      setRecentPurchase(null);
+      recentPurchaseTimeoutRef.current = null;
+    }, 1200);
+  }
+  function showMobileSpendFeedback(amount: number) {
+    const feedback: MobileSpendFeedback = {
+      id: getNextFeedbackId(),
+      amount,
+    };
+
+    setMobileSpendFeedback(feedback);
+
+    window.setTimeout(() => {
+      setMobileSpendFeedback((current) =>
+        current?.id === feedback.id ? null : current,
+      );
+    }, 1200);
+  }
+
   function selectUpgrade(upgradeId: number) {
     setFocusedRegion("deck");
     setSelectedUpgradeId(upgradeId);
     scrollToUpgrade(upgradeId);
   }
 
-  function handleBuyUpgrade(upgradeId: number) {
-    dispatch({ type: "BUY_UPGRADE", payload: upgradeId });
+  function handleBuyUpgrade(upgrade: Upgrade) {
+    selectUpgrade(upgrade.id);
+
+    const cost = Math.ceil(upgrade.costNext);
+
+    if (hobbits < cost) {
+      const missingHobbits = Math.ceil(cost - hobbits);
+
+      showDeckNotice(
+        "warning",
+        `${missingHobbits.toLocaleString()} more hobbits needed`,
+      );
+
+      return;
+    }
+
+    dispatch({ type: "BUY_UPGRADE", payload: upgrade.id });
+
+    onUpgradePurchased(cost);
+    showMobileSpendFeedback(cost);
+    showRecentPurchase(upgrade.id);
+    showDeckNotice("success", "Upgrade purchased!");
   }
 
   function handleKeyboardNavigation(event: React.KeyboardEvent<HTMLElement>) {
@@ -308,7 +416,7 @@ export function UpgradePanel() {
       event.preventDefault();
 
       if (hobbits >= activeUpgrade.costNext) {
-        handleBuyUpgrade(activeUpgrade.id);
+        handleBuyUpgrade(activeUpgrade);
       }
     }
   }
@@ -334,8 +442,43 @@ export function UpgradePanel() {
         }
       }}
       aria-label="Upgrade deck"
-      className="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl border border-amber-200/20 bg-stone-950/95 px-4 pb-4 pt-14 shadow-2xl outline-none backdrop-blur focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-amber-200/20 md:p-4"
+      className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-3xl border border-amber-200/20 bg-stone-950/95 px-4 pb-4 pt-14 shadow-2xl outline-none backdrop-blur focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-amber-200/20 md:p-4"
     >
+      <div
+        aria-live="polite"
+        className="pointer-events-none absolute left-1/2 top-4 z-50 w-[calc(100%-2rem)] -translate-x-1/2"
+      >
+        {deckNotice && (
+          <div
+            key={deckNotice.id}
+            className={[
+              "mx-auto max-w-sm rounded-full border px-4 py-2 text-center text-sm font-semibold shadow-lg animate-[notice-pop_1600ms_ease-out_forwards]",
+              deckNotice.type === "success"
+                ? "border-green-300/40 bg-green-950/90 text-green-100"
+                : "border-amber-300/40 bg-amber-950/90 text-amber-100",
+            ].join(" ")}
+          >
+            {deckNotice.message}
+          </div>
+        )}
+      </div>
+      <div className="pointer-events-none absolute left-4 top-3 z-40 md:hidden">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-amber-200/45">
+          Hobbits
+        </p>
+
+        <div className="relative">
+          <p className="text-sm font-bold text-amber-100">
+            {Math.floor(hobbits).toLocaleString()}
+          </p>
+
+          {mobileSpendFeedback && (
+            <span className="absolute left-full top-0 ml-2 animate-[float-spend_1200ms_ease-out_forwards] text-sm font-black text-red-300">
+              -{mobileSpendFeedback.amount.toLocaleString()}
+            </span>
+          )}
+        </div>
+      </div>
       <div className="shrink-0">
         <h2 className="text-lg font-semibold text-amber-100">
           Rebuild the Shire
@@ -370,10 +513,10 @@ export function UpgradePanel() {
                 className={[
                   "rounded-full px-3 py-1.5 text-sm font-semibold transition focus-visible:outline-none",
                   isSelectedFilter
-                    ? "bg-amber-200 text-stone-950"
-                    : "bg-stone-800 text-amber-100/75 hover:bg-stone-700",
+                    ? "bg-amber-200 text-stone-950 cursor-default"
+                    : "bg-stone-800 text-amber-100/75 hover:bg-stone-700 cursor-pointer",
                   isFocusedFilter
-                    ? "ring-2 ring-amber-300 ring-offset-2 ring-offset-stone-950"
+                    ? "ring-2 ring-amber-300 ring-offset-2 ring-offset-stone-950 cursor-pointer"
                     : "",
                 ].join(" ")}
               >
@@ -402,8 +545,14 @@ export function UpgradePanel() {
                   upgrade={upgrade}
                   isSelected={upgrade.id === visuallyActiveUpgradeId}
                   isAffordable={hobbits >= upgrade.costNext}
+                  isRecentlyPurchased={recentPurchase?.upgradeId === upgrade.id}
+                  recentPurchaseCount={
+                    recentPurchase?.upgradeId === upgrade.id
+                      ? recentPurchase.count
+                      : 0
+                  }
                   onSelect={() => selectUpgrade(upgrade.id)}
-                  onBuy={() => handleBuyUpgrade(upgrade.id)}
+                  onBuy={() => handleBuyUpgrade(upgrade)}
                   variant="landscape"
                 />
               </div>
@@ -431,8 +580,16 @@ export function UpgradePanel() {
                     upgrade={upgrade}
                     isSelected={upgrade.id === visuallyActiveUpgradeId}
                     isAffordable={hobbits >= upgrade.costNext}
+                    isRecentlyPurchased={
+                      recentPurchase?.upgradeId === upgrade.id
+                    }
+                    recentPurchaseCount={
+                      recentPurchase?.upgradeId === upgrade.id
+                        ? recentPurchase.count
+                        : 0
+                    }
                     onSelect={() => selectUpgrade(upgrade.id)}
-                    onBuy={() => handleBuyUpgrade(upgrade.id)}
+                    onBuy={() => handleBuyUpgrade(upgrade)}
                     variant="portrait"
                   />
                 </div>
@@ -453,8 +610,8 @@ export function UpgradePanel() {
                   className={[
                     "h-2 rounded-full transition-all",
                     upgrade.id === activeUpgradeId
-                      ? "w-6 bg-amber-200"
-                      : "w-2 bg-amber-200/30 hover:bg-amber-200/50",
+                      ? "cursor-default w-6 bg-amber-200"
+                      : "cursor-pointer w-2 bg-amber-200/30 hover:bg-amber-200/50",
                   ].join(" ")}
                 />
               ))}

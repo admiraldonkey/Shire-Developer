@@ -1,13 +1,37 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 // import { useUserState } from "../hooks/UseUser";
 import { TopBar } from "./TopBar";
 import { ResourcePanel } from "./ResourcePanel";
 import { MainActionPanel } from "./MainActionPanel";
 import { UpgradeDrawer } from "./UpgradeDrawer";
 import { ChroniclePanel } from "./ChroniclePanel";
+import type { ResourceSpendFeedback } from "../../types/UI.types";
 
 export function GameLayout() {
   const [isUpgradePanelOpen, setIsUpgradePanelOpen] = useState(false);
+  const [spendFeedback, setSpendFeedback] =
+    useState<ResourceSpendFeedback | null>(null);
+  const spendFeedbackIdRef = useRef(0);
+
+  function getNextSpendFeedbackId() {
+    spendFeedbackIdRef.current += 1;
+    return spendFeedbackIdRef.current;
+  }
+
+  function handleUpgradePurchased(cost: number) {
+    const feedback: ResourceSpendFeedback = {
+      id: getNextSpendFeedbackId(),
+      amount: cost,
+    };
+
+    setSpendFeedback(feedback);
+
+    window.setTimeout(() => {
+      setSpendFeedback((current) =>
+        current?.id === feedback.id ? null : current,
+      );
+    }, 1200);
+  }
   // const { currentUser } = useUserState();
 
   // useEffect(() => {
@@ -22,7 +46,7 @@ export function GameLayout() {
         <TopBar />
 
         <div className="relative flex min-h-0 flex-1 flex-col gap-3 overflow-hidden p-4 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-4">
-          <ResourcePanel />
+          <ResourcePanel spendFeedback={spendFeedback} />
 
           <div className="flex min-h-0 flex-1 flex-col gap-3 lg:contents">
             <div className="flex items-center lg:hidden">
@@ -30,7 +54,7 @@ export function GameLayout() {
                 type="button"
                 onClick={() => setIsUpgradePanelOpen((current) => !current)}
                 aria-expanded={isUpgradePanelOpen}
-                className="flex h-11 w-full items-center justify-center rounded-xl border border-amber-300/40 bg-stone-950/90 px-4 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900"
+                className="cursor-pointer flex h-11 w-full items-center justify-center rounded-xl border border-amber-300/40 bg-stone-950/90 px-4 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900"
               >
                 {isUpgradePanelOpen ? "Hide upgrades" : "Show upgrades"}
               </button>
@@ -42,6 +66,7 @@ export function GameLayout() {
           <UpgradeDrawer
             isOpen={isUpgradePanelOpen}
             onToggle={() => setIsUpgradePanelOpen((current) => !current)}
+            onUpgradePurchased={handleUpgradePurchased}
           />
         </div>
         <ChroniclePanel />
