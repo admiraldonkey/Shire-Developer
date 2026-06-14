@@ -96,7 +96,7 @@ export function TopBar() {
             onClick={() => setIsMenuOpen((current) => !current)}
             aria-expanded={isMenuOpen}
             aria-haspopup="menu"
-            className="flex h-10 items-center justify-center rounded-full border border-amber-300/40 bg-stone-950/90 px-3 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 sm:px-4"
+            className="cursor-pointer flex h-10 items-center justify-center rounded-full border border-amber-300/40 bg-stone-950/90 px-3 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 sm:px-4"
           >
             <span className="sm:hidden" aria-hidden="true">
               ⚙
@@ -145,7 +145,7 @@ function MenuButton({ children, onClick, danger = false }: MenuButtonProps) {
       role="menuitem"
       onClick={onClick}
       className={[
-        "flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition",
+        "cursor-pointer flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition",
         danger
           ? "text-red-200 hover:bg-red-950/60 hover:text-red-100"
           : "text-amber-100/85 hover:bg-amber-100/10 hover:text-amber-50",

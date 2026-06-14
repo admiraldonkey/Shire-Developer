@@ -37,7 +37,7 @@ export function RecruitButton() {
         type="button"
         onClick={handleRecruit}
         className={[
-          "relative rounded-full border-4 border-amber-300/50 bg-green-900",
+          "cursor-pointer relative rounded-full border-4 border-amber-300/50 bg-green-900",
           "h-40 w-40 sm:h-48 sm:w-48 lg:h-52 lg:w-52",
           "shadow-2xl shadow-amber-950/50 transition",
           "hover:scale-105 active:scale-95",

@@ -4,6 +4,8 @@ type UpgradeCardProps = {
   upgrade: Upgrade;
   isSelected: boolean;
   isAffordable: boolean;
+  isRecentlyPurchased?: boolean;
+  recentPurchaseCount?: number;
   onSelect: () => void;
   onBuy: () => void;
   variant?: "landscape" | "portrait";
@@ -13,6 +15,8 @@ export function UpgradeCard({
   upgrade,
   isSelected,
   isAffordable,
+  isRecentlyPurchased = false,
+  recentPurchaseCount = 0,
   onSelect,
   onBuy,
   variant = "landscape",
@@ -24,22 +28,35 @@ export function UpgradeCard({
       ? `+${upgrade.effect.value} / sec`
       : `+${upgrade.effect.value} / click`;
 
+  const cardStateClasses = isRecentlyPurchased
+    ? "z-30 scale-100 cursor-default border-green-400 opacity-100 shadow-2xl"
+    : isSelected
+      ? "z-20 scale-100 cursor-default border-amber-300 opacity-100 ring-2 ring-amber-300 shadow-2xl"
+      : "z-10 scale-[0.96] cursor-pointer border-stone-400/70 opacity-65 hover:opacity-85";
+
   return (
     <article
       onClick={onSelect}
       className={[
-        "relative w-full cursor-pointer overflow-hidden rounded-2xl border shadow-xl",
+        "relative w-full overflow-hidden rounded-2xl border shadow-xl",
         "transition-all duration-300",
         "bg-linear-to-br from-amber-50 via-stone-100 to-amber-100 text-stone-950",
         isPortrait
           ? "h-[min(28rem,calc(100vh-18rem))] min-h-96 p-4"
           : "w-full min-h-48 p-3",
-        isSelected
-          ? "z-20 scale-100 border-amber-300 opacity-100 ring-2 ring-amber-300 shadow-2xl"
-          : "z-10 scale-[0.96] border-stone-400/70 opacity-65 hover:opacity-85",
-        isSelected && !isPortrait ? "translate-x-2" : "",
+        cardStateClasses,
+        isSelected && !isPortrait && !isRecentlyPurchased
+          ? "translate-x-2"
+          : "",
       ].join(" ")}
     >
+      {isRecentlyPurchased && (
+        <div
+          key={`purchase-flash-${upgrade.id}-${recentPurchaseCount}`}
+          className="pointer-events-none absolute inset-0 z-20 animate-[purchase-flash_1400ms_ease-out] rounded-2xl"
+          aria-hidden="true"
+        />
+      )}
       {isPortrait ? (
         <div className="flex h-full flex-col">
           <div className="flex h-32 shrink-0 items-center justify-center rounded-xl border border-amber-300/70 bg-green-900 text-center text-sm text-amber-100 shadow-inner sm:h-40">
@@ -57,7 +74,22 @@ export function UpgradeCard({
               </h3>
             </div>
 
-            <div className="shrink-0 rounded-full bg-stone-950 px-3 py-1 text-xs font-semibold text-amber-100">
+            <div
+              className={[
+                "relative z-40 shrink-0 rounded-full px-3 py-1 text-xs font-semibold transition",
+                isRecentlyPurchased
+                  ? "bg-green-950 text-green-100 ring-2 ring-green-400/70 shadow-[0_0_1rem_rgba(34,197,94,0.7)]"
+                  : "bg-stone-950 text-amber-100",
+              ].join(" ")}
+            >
+              {isRecentlyPurchased && recentPurchaseCount > 0 && (
+                <span
+                  key={`${upgrade.id}-${recentPurchaseCount}`}
+                  className="pointer-events-none absolute right-full top-1/2 z-50 mr-2 -translate-y-1/2 animate-[owned-pop_1200ms_ease-out_forwards] rounded-full bg-green-950/95 px-2 py-0.5 text-xs font-black text-green-100 shadow-lg ring-1 ring-green-300/50"
+                >
+                  +{recentPurchaseCount}
+                </span>
+              )}
               Own {upgrade.owned}
             </div>
           </div>
@@ -95,11 +127,11 @@ export function UpgradeCard({
                 event.stopPropagation();
                 onBuy();
               }}
-              disabled={!isAffordable}
+              aria-disabled={!isAffordable}
               className={[
                 "rounded-full px-4 py-2 text-sm font-bold transition",
                 isAffordable
-                  ? "bg-green-800 text-amber-50 hover:bg-green-700"
+                  ? "cursor-pointer bg-green-800 text-amber-50 hover:bg-green-700"
                   : "cursor-not-allowed bg-stone-400 text-stone-100 opacity-70",
               ].join(" ")}
             >
@@ -127,7 +159,22 @@ export function UpgradeCard({
                 </h3>
               </div>
 
-              <div className="shrink-0 rounded-full bg-stone-950 px-2.5 py-1 text-xs font-semibold text-amber-100">
+              <div
+                className={[
+                  "relative z-40 shrink-0 rounded-full px-3 py-1 text-xs font-semibold transition",
+                  isRecentlyPurchased
+                    ? "bg-green-950 text-green-100 ring-2 ring-green-400/70 shadow-[0_0_1rem_rgba(34,197,94,0.7)]"
+                    : "bg-stone-950 text-amber-100",
+                ].join(" ")}
+              >
+                {isRecentlyPurchased && recentPurchaseCount > 0 && (
+                  <span
+                    key={`${upgrade.id}-${recentPurchaseCount}`}
+                    className="pointer-events-none absolute right-full top-1/2 z-50 mr-2 -translate-y-1/2 animate-[owned-pop_1200ms_ease-out_forwards] rounded-full bg-green-950/95 px-2 py-0.5 text-xs font-black text-green-100 shadow-lg ring-1 ring-green-300/50"
+                  >
+                    +{recentPurchaseCount}
+                  </span>
+                )}
                 Own {upgrade.owned}
               </div>
             </div>
@@ -165,11 +212,11 @@ export function UpgradeCard({
                   event.stopPropagation();
                   onBuy();
                 }}
-                disabled={!isAffordable}
+                aria-disabled={!isAffordable}
                 className={[
-                  "shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition",
+                  "rounded-full px-4 py-2 text-sm font-bold transition",
                   isAffordable
-                    ? "bg-green-800 text-amber-50 hover:bg-green-700"
+                    ? "cursor-pointer bg-green-800 text-amber-50 hover:bg-green-700"
                     : "cursor-not-allowed bg-stone-400 text-stone-100 opacity-70",
                 ].join(" ")}
               >

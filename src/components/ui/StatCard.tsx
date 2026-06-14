@@ -1,8 +1,13 @@
 import { type StatCardProps } from "../../types/UI.types";
 
-export function StatCard({ label, value }: StatCardProps) {
+export function StatCard({ label, value, className = "" }: StatCardProps) {
   return (
-    <div className="rounded-2xl border border-amber-200/15 bg-black/20 p-3 lg:p-4">
+    <div
+      className={[
+        "rounded-2xl border border-amber-200/15 bg-black/20 p-3 transition lg:p-4",
+        className,
+      ].join(" ")}
+    >
       <p className="text-[9px] uppercase tracking-[0.24em] text-amber-200/50 lg:text-[10px]">
         {label}
       </p>

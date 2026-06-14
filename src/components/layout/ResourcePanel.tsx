@@ -5,8 +5,13 @@ import {
   getHobbitsPerSecond,
   getTotalOwnedUpgrades,
 } from "../../utils/gameCalculations";
+import type { ResourceSpendFeedback } from "../../types/UI.types";
 
-export function ResourcePanel() {
+type ResourcePanelProps = {
+  spendFeedback?: ResourceSpendFeedback | null;
+};
+
+export function ResourcePanel({ spendFeedback }: ResourcePanelProps) {
   const { hobbits, upgrades } = useGameState();
 
   const hobbitsPerClick = getHobbitsPerClick(upgrades);
@@ -20,10 +25,24 @@ export function ResourcePanel() {
       </h2>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 lg:gap-4">
-        <StatCard
-          label="Hobbits"
-          value={Math.floor(hobbits).toLocaleString()}
-        />
+        <div className="relative">
+          <StatCard
+            label="Hobbits"
+            value={Math.floor(hobbits).toLocaleString()}
+            className={
+              spendFeedback ? "ring-2 ring-red-400/70 bg-red-950/30" : ""
+            }
+          />
+
+          {spendFeedback && (
+            <span
+              key={spendFeedback.id}
+              className="pointer-events-none absolute right-4 top-2 animate-[float-spend_1200ms_ease-out_forwards] text-sm font-black text-red-300"
+            >
+              -{spendFeedback.amount.toLocaleString()}
+            </span>
+          )}
+        </div>
         <StatCard
           label="Per second"
           value={hobbitsPerSecond.toLocaleString()}

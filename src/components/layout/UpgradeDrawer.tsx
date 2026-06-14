@@ -3,9 +3,14 @@ import { UpgradePanel } from "../game/UpgradePanel";
 type UpgradeDrawerProps = {
   isOpen: boolean;
   onToggle: () => void;
+  onUpgradePurchased: (cost: number) => void;
 };
 
-export function UpgradeDrawer({ isOpen, onToggle }: UpgradeDrawerProps) {
+export function UpgradeDrawer({
+  isOpen,
+  onToggle,
+  onUpgradePurchased,
+}: UpgradeDrawerProps) {
   return (
     <>
       {isOpen && (
@@ -21,7 +26,7 @@ export function UpgradeDrawer({ isOpen, onToggle }: UpgradeDrawerProps) {
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="absolute right-4 top-4 z-50 mt-2 mr-2 hidden rounded-full border border-amber-300/40 bg-stone-950/90 px-4 py-2 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 md:block"
+        className="cursor-pointer absolute right-4 top-4 z-50 mt-2 mr-2 hidden rounded-full border border-amber-300/40 bg-stone-950/90 px-4 py-2 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 md:block"
       >
         {isOpen ? "Hide upgrades" : "Show upgrades"}
       </button>
@@ -41,12 +46,12 @@ export function UpgradeDrawer({ isOpen, onToggle }: UpgradeDrawerProps) {
             type="button"
             onClick={onToggle}
             aria-label="Close upgrades"
-            className="absolute right-3 top-3 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-amber-300/40 bg-stone-950 text-lg font-bold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 md:hidden"
+            className="cursor-pointer absolute right-3 top-3 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-amber-300/40 bg-stone-950 text-lg font-bold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 md:hidden"
           >
             ×
           </button>
 
-          <UpgradePanel />
+          <UpgradePanel onUpgradePurchased={onUpgradePurchased} />
         </div>
       </aside>
     </>

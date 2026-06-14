@@ -175,6 +175,7 @@ export const SplashScreen = () => {
           <button
             type="submit"
             className={`
+              cursor-pointer
             mt-5
             w-full
             py-3
