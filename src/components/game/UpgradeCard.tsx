@@ -28,7 +28,7 @@ export function UpgradeCard({
     <article
       onClick={onSelect}
       className={[
-        "relative cursor-pointer overflow-hidden rounded-2xl border shadow-xl",
+        "relative w-full cursor-pointer overflow-hidden rounded-2xl border shadow-xl",
         "transition-all duration-300",
         "bg-linear-to-br from-amber-50 via-stone-100 to-amber-100 text-stone-950",
         isPortrait
