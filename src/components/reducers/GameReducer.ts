@@ -3,12 +3,20 @@ import {
   getHobbitsPerClick,
   getHobbitsPerSecond,
 } from "../../utils/gameCalculations";
+import {
+  addDaysToShireDate,
+  INITIAL_CHRONICLE_DATE,
+} from "../../utils/chronicleDates";
 
 export const initialGameState: GameState = {
   hobbits: 0,
   hobbitsPerSecond: 0,
   hobbitsPerClick: 1,
+  chronicleEntries: [],
+  nextChronicleId: 1,
+  currentChronicleDate: INITIAL_CHRONICLE_DATE,
   upgrades: [],
+  isGameLoaded: false,
 };
 
 export const gameReducer = (
@@ -69,14 +77,42 @@ export const gameReducer = (
         }),
       };
     }
+    // Add a new entry to the chronicle panel/ticker. Restricted to 12 most recent
+    case "ADD_CHRONICLE_ENTRY": {
+      const entryDate = addDaysToShireDate(
+        state.currentChronicleDate,
+        action.payload.dayAdvance ?? 0,
+      );
 
+      const newEntry = {
+        id: state.nextChronicleId,
+        type: action.payload.type,
+        message: action.payload.message,
+        date: entryDate,
+      };
+
+      return {
+        ...state,
+        currentChronicleDate: entryDate,
+        chronicleEntries: [newEntry, ...state.chronicleEntries].slice(0, 12),
+        nextChronicleId: state.nextChronicleId + 1,
+      };
+    }
     // Quick way to add 10,000 hobbits to user
     case "CHEAT":
       return { ...state, hobbits: state.hobbits + 10000 };
     //
     case "LOAD_GAME":
       // Parsed data pulled from local storage is added to game state (dispatched from handleLoad onClick function in Options component)
-      return action.payload;
+      return {
+        ...initialGameState,
+        ...action.payload,
+        isGameLoaded: true,
+        chronicleEntries: action.payload.chronicleEntries ?? [],
+        nextChronicleId: action.payload.nextChronicleId ?? 1,
+        currentChronicleDate:
+          action.payload.currentChronicleDate ?? INITIAL_CHRONICLE_DATE,
+      };
     // Game data is reset to default game state
     case "RESET":
       return initialGameState;

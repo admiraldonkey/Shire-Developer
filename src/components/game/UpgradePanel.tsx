@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGameDispatch, useGameState } from "../hooks/UseGame";
 import { UpgradeCard } from "./UpgradeCard";
 import type { Upgrade } from "../../types/Game.types";
+import { getUpgradeChronicleDayAdvance } from "../../utils/chronicleDates";
 
 const UPGRADE_FILTERS = ["all", "passive", "click"] as const;
 
@@ -345,6 +346,15 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
     }
 
     dispatch({ type: "BUY_UPGRADE", payload: upgrade.id });
+
+    dispatch({
+      type: "ADD_CHRONICLE_ENTRY",
+      payload: {
+        type: "purchase",
+        message: `${upgrade.name} added to the restoration effort`,
+        dayAdvance: getUpgradeChronicleDayAdvance(upgrade),
+      },
+    });
 
     onUpgradePurchased(cost);
     showMobileSpendFeedback(cost);
