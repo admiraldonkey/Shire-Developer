@@ -42,10 +42,10 @@ export function GameLayout() {
 
   return (
     <main className="h-dvh overflow-hidden bg-stone-950 text-amber-50">
-      <div className="flex h-full flex-col">
+      <div className="flex h-full min-h-0 flex-col">
         <TopBar />
 
-        <div className="relative flex min-h-0 flex-1 flex-col gap-3 overflow-hidden p-4 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-4">
+        <div className="relative flex min-h-0 flex-1 flex-col gap-2.5 overflow-hidden p-2.5 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-4 lg:p-4">
           <ResourcePanel spendFeedback={spendFeedback} />
 
           <div className="flex min-h-0 flex-1 flex-col gap-3 lg:contents">
