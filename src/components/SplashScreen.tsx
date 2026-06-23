@@ -44,7 +44,7 @@ export const SplashScreen = () => {
   };
 
   return (
-    <div className="relative isolate flex flex-col items-center justify-center h-screen overflow-hidden text-[#f3e9d2] bg-linear-to-br from-[#1c2b22] via-[#2f3e2f] to-[#4b3a2f]">
+    <div className="relative isolate flex flex-col items-center justify-center h-dvh overflow-hidden text-[#f3e9d2] bg-linear-to-br from-[#1c2b22] via-[#2f3e2f] to-[#4b3a2f]">
       {/* Ambient background glow */}
       <div className="absolute w-150 h-150 bg-yellow-200/10 blur-3xl rounded-full z-0" />
       <div className="absolute top-[-10%] left-[15%] w-125 h-125 bg-yellow-200/10 rounded-full blur-3xl z-[0]" />

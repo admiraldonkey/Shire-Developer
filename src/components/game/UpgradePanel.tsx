@@ -526,14 +526,14 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
           })}
         </div>
 
-        <p className="mt-3 text-xs text-amber-100/45">
+        <p className="mt-3 hidden text-xs text-amber-100/45 md:block">
           Use arrow keys to browse. Press Enter to buy the selected upgrade.
         </p>
       </div>
 
       <div className="mt-4 min-h-0 flex-1 overflow-hidden">
         {/* Desktop stacked deck */}
-        <div className="hidden h-full overflow-y-scroll overflow-x-hidden pr-3 [scrollbar-gutter:stable] md:block">
+        <div className="hidden h-full overflow-y-scroll overflow-x-hidden pr-3 scrollbar-gutter:stable md:block">
           <div className="-space-y-5 pb-8">
             {visibleUpgrades.map((upgrade) => (
               <div
