@@ -41,7 +41,7 @@ export function GameLayout() {
   // ^^ Fix above once switch user button has been implemented
 
   return (
-    <main className="h-screen overflow-hidden bg-stone-950 text-amber-50">
+    <main className="h-dvh overflow-hidden bg-stone-950 text-amber-50">
       <div className="flex h-full flex-col">
         <TopBar />
 

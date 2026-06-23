@@ -34,7 +34,7 @@ export function UpgradeDrawer({
       <aside
         className={[
           "absolute z-40 transition-transform duration-300 ease-out",
-          "inset-x-3 bottom-3 top-3",
+          "left-3 right-3 top-[calc(env(safe-area-inset-top,0)+0.75rem)] bottom-[calc(env(safe-area-inset-bottom,0)+0.75rem)]",
           "md:bottom-4 md:right-4 md:left-auto md:top-16 md:w-[min(92vw,34rem)]",
           "w-auto",
           isOpen ? "translate-x-0" : "translate-x-[calc(100%+2rem)]",

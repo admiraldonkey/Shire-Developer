@@ -42,7 +42,7 @@ export function UpgradeCard({
         "transition-all duration-300",
         "bg-linear-to-br from-amber-50 via-stone-100 to-amber-100 text-stone-950",
         isPortrait
-          ? "h-[min(28rem,calc(100vh-18rem))] min-h-96 p-4"
+          ? "h-[min(24rem,calc(100vh-18rem))] min-h-88 p-4"
           : "w-full min-h-48 p-3",
         cardStateClasses,
         isSelected && !isPortrait && !isRecentlyPurchased
@@ -59,7 +59,7 @@ export function UpgradeCard({
       )}
       {isPortrait ? (
         <div className="flex h-full flex-col">
-          <div className="flex h-32 shrink-0 items-center justify-center rounded-xl border border-amber-300/70 bg-green-900 text-center text-sm text-amber-100 shadow-inner sm:h-40">
+          <div className="flex h-28 shrink-0 items-center justify-center rounded-xl border border-amber-300/70 bg-green-900 text-center text-sm text-amber-100 shadow-inner sm:h-32">
             Artwork placeholder
           </div>
 
@@ -94,7 +94,7 @@ export function UpgradeCard({
             </div>
           </div>
 
-          <p className="mt-3 line-clamp-2 text-sm leading-snug text-stone-700">
+          <p className="mt-2 line-clamp-2 text-sm leading-snug text-stone-700">
             {upgrade.description}
           </p>
 
