@@ -19,12 +19,12 @@ export function ResourcePanel({ spendFeedback }: ResourcePanelProps) {
   const totalOwnedUpgrades = getTotalOwnedUpgrades(upgrades);
 
   return (
-    <aside className="rounded-3xl border border-amber-200/20 bg-stone-900/80 p-4 shadow-2xl backdrop-blur lg:p-5">
-      <h2 className="mb-3 text-lg font-semibold text-amber-100 lg:mb-4">
+    <aside className="shrink-0 rounded-3xl border border-amber-200/20 bg-stone-900/80 p-3 shadow-2xl backdrop-blur lg:min-h-0 lg:overflow-y-auto lg:p-4">
+      <h2 className="mb-2 text-base font-semibold text-amber-100 lg:mb-4 lg:text-lg">
         Shire Ledger
       </h2>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 lg:gap-4">
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:gap-3">
         <div className="relative">
           <StatCard
             label="Hobbits"

@@ -41,9 +41,7 @@ export function UpgradeCard({
         "relative w-full overflow-hidden rounded-2xl border shadow-xl",
         "transition-all duration-300",
         "bg-linear-to-br from-amber-50 via-stone-100 to-amber-100 text-stone-950",
-        isPortrait
-          ? "h-[min(24rem,calc(100vh-18rem))] min-h-88 p-4"
-          : "w-full min-h-48 p-3",
+        isPortrait ? "h-full min-h-0 p-3" : "w-full min-h-48 p-3",
         cardStateClasses,
         isSelected && !isPortrait && !isRecentlyPurchased
           ? "translate-x-2"
@@ -58,9 +56,16 @@ export function UpgradeCard({
         />
       )}
       {isPortrait ? (
-        <div className="flex h-full flex-col">
-          <div className="flex h-28 shrink-0 items-center justify-center rounded-xl border border-amber-300/70 bg-green-900 text-center text-sm text-amber-100 shadow-inner sm:h-32">
+        <div className="flex h-full min-h-0 flex-col">
+          <div className="flex h-24 shrink-0 items-center justify-center rounded-xl border border-amber-300/70 bg-green-900 text-center text-sm text-amber-100 shadow-inner sm:h-28">
             Artwork placeholder
+            {/* 
+            Use below for images so they crop to fit frame:
+            <img
+  src={upgrade.image}
+  alt=""
+  className="h-full w-full rounded-xl object-cover"
+/> */}
           </div>
 
           <div className="mt-4 flex shrink-0 items-start justify-between gap-3">
@@ -69,7 +74,7 @@ export function UpgradeCard({
                 {upgrade.category === "passive" ? "Passive" : "Click"}
               </p>
 
-              <h3 className="mt-1 line-clamp-2 text-xl font-black leading-tight sm:text-2xl">
+              <h3 className="mt-1 line-clamp-2 text-lg font-black leading-tight sm:text-xl">
                 {upgrade.name}
               </h3>
             </div>
@@ -94,11 +99,11 @@ export function UpgradeCard({
             </div>
           </div>
 
-          <p className="mt-2 line-clamp-2 text-sm leading-snug text-stone-700">
+          <p className="mt-2 line-clamp-2 text-xs leading-snug text-stone-700 sm:text-sm">
             {upgrade.description}
           </p>
 
-          <div className="mt-3 grid shrink-0 grid-cols-2 gap-2 text-sm">
+          <div className="mt-3 grid shrink-0 grid-cols-2 gap-2 text-xs sm:text-sm">
             <div className="rounded-lg bg-white/60 px-3 py-2">
               <p className="text-[10px] uppercase tracking-[0.2em] text-stone-500">
                 Effect
@@ -116,7 +121,7 @@ export function UpgradeCard({
             </div>
           </div>
 
-          <div className="mt-auto flex shrink-0 items-center justify-between gap-3 pt-3">
+          <div className="mt-auto flex shrink-0 items-center justify-between gap-3 pt-2">
             <p className="text-xs text-stone-600">
               {isAffordable ? "Ready to recruit" : "Gather more hobbits"}
             </p>
@@ -129,7 +134,7 @@ export function UpgradeCard({
               }}
               aria-disabled={!isAffordable}
               className={[
-                "rounded-full px-4 py-2 text-sm font-bold transition",
+                "rounded-full px-3 py-1.5 text-xs font-bold transition sm:px-4 sm:py-2 sm:text-sm",
                 isAffordable
                   ? "cursor-pointer bg-green-800 text-amber-50 hover:bg-green-700"
                   : "cursor-not-allowed bg-stone-400 text-stone-100 opacity-70",

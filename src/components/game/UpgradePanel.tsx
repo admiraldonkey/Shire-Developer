@@ -480,16 +480,16 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
         </div>
       </div>
       <div className="shrink-0">
-        <h2 className="text-lg font-semibold text-amber-100">
+        <h2 className="text-base font-semibold text-amber-100 md:text-lg">
           Rebuild the Shire
         </h2>
 
-        <p className="mt-1 text-sm text-amber-100/60">
+        <p className="mt-1 hidden text-sm text-amber-100/60 md:block">
           Invest in comfort, community, and second breakfast logistics.
         </p>
 
         <div
-          className="mt-4 flex gap-2"
+          className="mt-3 flex gap-2 md:mt-4"
           role="tablist"
           aria-label="Upgrade filters"
         >
@@ -565,7 +565,7 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
           <div className="min-h-0 flex-1 overflow-hidden">
             <div
               ref={mobileCarouselRef}
-              className="flex h-full snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden px-8 py-3"
+              className="flex h-full snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden px-8 py-2"
             >
               <div className="w-[4vw] shrink-0" aria-hidden="true" />
 
@@ -574,7 +574,7 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
                   key={upgrade.id}
                   ref={setMobileCardRef(upgrade.id)}
                   data-upgrade-id={upgrade.id}
-                  className="flex w-[72vw] max-w-xs shrink-0 snap-center items-center py-2"
+                  className="flex h-full w-[72vw] max-w-xs shrink-0 snap-center items-stretch py-1"
                 >
                   <UpgradeCard
                     upgrade={upgrade}

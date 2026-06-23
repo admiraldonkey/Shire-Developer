@@ -1,7 +1,12 @@
 export const ChroniclePanel = () => {
   return (
-    <footer className="hidden shrink-0 border-t border-amber-200/10 px-4 py-2 text-sm text-amber-100/70 md:block">
-      Chronicle, progress and event info go here
+    <footer className="shrink-0 border-t border-amber-200/10 bg-black/60 px-3 py-2 text-xs text-amber-100/70 md:text-sm">
+      <div className="overflow-hidden whitespace-nowrap">
+        <span className="inline-block">
+          The Shire Chronicle: Restoration efforts continue across the Four
+          Farthings...
+        </span>
+      </div>
     </footer>
   );
 };

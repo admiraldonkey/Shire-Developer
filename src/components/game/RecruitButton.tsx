@@ -38,16 +38,16 @@ export function RecruitButton() {
         onClick={handleRecruit}
         className={[
           "cursor-pointer relative rounded-full border-4 border-amber-300/50 bg-green-900",
-          "h-40 w-40 sm:h-48 sm:w-48 lg:h-52 lg:w-52",
+          "h-[clamp(7rem,32vw,9rem)] w-[clamp(7rem,32vw,9rem)] sm:h-44 sm:w-44 lg:h-52 lg:w-52",
           "shadow-2xl shadow-amber-950/50 transition",
           "hover:scale-105 active:scale-95",
         ].join(" ")}
       >
-        <span className="block text-lg font-bold text-amber-100">
+        <span className="block text-base font-bold text-amber-100 sm:text-lg">
           Recruit Hobbit
         </span>
 
-        <span className="mt-2 block text-sm text-amber-100/60">
+        <span className="mt-1 block text-xs text-amber-100/60 sm:mt-2 sm:text-sm">
           +{hobbitsPerClick} per click
         </span>
       </button>
