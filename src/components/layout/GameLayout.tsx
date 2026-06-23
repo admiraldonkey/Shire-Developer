@@ -4,7 +4,7 @@ import { TopBar } from "./TopBar";
 import { ResourcePanel } from "./ResourcePanel";
 import { MainActionPanel } from "./MainActionPanel";
 import { UpgradeDrawer } from "./UpgradeDrawer";
-import { ChroniclePanel } from "./ChroniclePanel";
+import { ChronicleTicker } from "./ChronicleTicker";
 import type { ResourceSpendFeedback } from "../../types/UI.types";
 
 export function GameLayout() {
@@ -69,7 +69,7 @@ export function GameLayout() {
             onUpgradePurchased={handleUpgradePurchased}
           />
         </div>
-        <ChroniclePanel />
+        <ChronicleTicker />
       </div>
     </main>
   );

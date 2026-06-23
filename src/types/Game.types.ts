@@ -1,5 +1,10 @@
 export type UpgradeCategory = "passive" | "click";
 export type UpgradeEffectType = "hobbitsPerSecond" | "hobbitsPerClick";
+import type {
+  ChronicleEntry,
+  ShireDate,
+  ChronicleEntryType,
+} from "./Chronicle.types";
 
 export type ApiUpgrade = {
   id: number;
@@ -27,7 +32,11 @@ export type GameState = {
   hobbits: number;
   hobbitsPerSecond: number;
   hobbitsPerClick: number;
+  chronicleEntries: ChronicleEntry[];
+  nextChronicleId: number;
+  currentChronicleDate: ShireDate;
   upgrades: Upgrade[];
+  isGameLoaded: boolean;
 };
 
 export type GameAction =
@@ -35,6 +44,14 @@ export type GameAction =
   | { type: "TICK_HOBBITS" }
   | { type: "SET_UPGRADES"; payload: Upgrade[] }
   | { type: "BUY_UPGRADE"; payload: number }
+  | {
+      type: "ADD_CHRONICLE_ENTRY";
+      payload: {
+        type: ChronicleEntryType;
+        message: string;
+        dayAdvance?: number;
+      };
+    }
   | { type: "CHEAT" }
   | { type: "LOAD_GAME"; payload: GameState }
   | { type: "RESET" };

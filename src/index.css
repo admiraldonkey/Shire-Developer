@@ -442,3 +442,40 @@
     transform: translateY(-0.25rem) scale(0.98);
   }
 }
+
+/* =========================
+     Chronicle Ticker
+     ========================= */
+
+@keyframes chronicle-marquee {
+  0% {
+    transform: translateX(100vw);
+  }
+
+  96% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.chronicle-marquee {
+  display: inline-flex;
+  min-width: max-content;
+  animation: chronicle-marquee 50s linear infinite;
+}
+
+@media (min-width: 1024px) {
+  .chronicle-marquee {
+    animation-duration: 60s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chronicle-marquee {
+    animation: none;
+    transform: none;
+  }
+}
