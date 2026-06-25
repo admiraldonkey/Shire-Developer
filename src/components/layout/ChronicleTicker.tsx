@@ -63,7 +63,7 @@ function ChronicleTickerContent({
           The Shire Chronicle
         </div>
 
-        <div className="relative min-w-0 flex-1 overflow-hidden">
+        <div className="relative isolate min-w-0 flex-1 overflow-hidden">
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-linear-to-r from-black/80 to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-linear-to-l from-black/80 to-transparent" />
 
@@ -74,14 +74,14 @@ function ChronicleTickerContent({
             {displayedMessages.map((message, index) => (
               <span
                 key={`${message}-${index}`}
-                className="inline-flex items-center"
+                className="inline-flex shrink-0 items-center"
               >
                 <span>{message}</span>
 
                 {index < displayedMessages.length - 1 && (
                   <span
                     aria-hidden="true"
-                    className="mx-6 text-amber-200/45 md:mx-8"
+                    className="mx-6 shrink-0 text-amber-200/45 md:mx-8"
                   >
                     ❧
                   </span>

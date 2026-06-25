@@ -18,17 +18,17 @@ Will you help rebuild what was lost and bring comfort, peace, and prosperity bac
 - API upgrade data transformed into strongly typed game models
 - Passive and click-based upgrade effects
 - Responsive upgrade card deck
+- Chronicle/event panel
 - Mobile-friendly layout with touch-friendly upgrade carousel
 - Interactive click feedback for player actions
 - Collapsible/overlay upgrade drawer
+- Upgrade deck keyboard navigation
 - Options menu for save/load/testing actions
 
 ## In Progress
 
-- Upgrade deck keyboard navigation
 - Keyboard-first interaction
 - Improved purchase feedback
-- Chronicle/event panel
 - Restoration stages to drive dynamic UI changes
 - Full visual polish: cards, textures, typography, atmosphere, and artwork
 - Accessibility-minded design, with ongoing WCAG-focused improvements
