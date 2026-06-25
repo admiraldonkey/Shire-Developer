@@ -7,8 +7,10 @@ import {
   addDaysToShireDate,
   INITIAL_CHRONICLE_DATE,
 } from "../../utils/chronicleDates";
+import { CURRENT_SAVE_VERSION } from "../../constants/saveVersion";
 
 export const initialGameState: GameState = {
+  saveVersion: CURRENT_SAVE_VERSION,
   hobbits: 0,
   hobbitsPerSecond: 0,
   hobbitsPerClick: 1,
