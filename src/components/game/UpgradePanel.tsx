@@ -3,6 +3,7 @@ import { useGameDispatch, useGameState } from "../hooks/UseGame";
 import { UpgradeCard } from "./UpgradeCard";
 import type { Upgrade } from "../../types/Game.types";
 import { getUpgradeChronicleDayAdvance } from "../../utils/chronicleDates";
+import { useRestorationStage } from "../hooks/UseRestorationStage";
 
 const UPGRADE_FILTERS = ["all", "passive", "click"] as const;
 
@@ -15,6 +16,7 @@ type UpgradePanelProps = {
 export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
   const { hobbits, upgrades } = useGameState();
   const dispatch = useGameDispatch();
+  const restorationStage = useRestorationStage();
 
   const [selectedFilter, setSelectedFilter] = useState<UpgradeFilter>("all");
   const [selectedUpgradeId, setSelectedUpgradeId] = useState<number | null>(
@@ -452,7 +454,11 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
         }
       }}
       aria-label="Upgrade deck"
-      className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-3xl border border-amber-200/20 bg-stone-950/95 px-4 pb-4 pt-14 shadow-2xl outline-none backdrop-blur focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-amber-200/20 md:p-4"
+      className={[
+        "relative flex h-full min-h-0 flex-col overflow-hidden rounded-3xl border px-4 pb-4 pt-14 shadow-2xl outline-none backdrop-blur transition-colors duration-700 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-amber-200/20 md:p-4",
+        restorationStage.theme.panelBackground,
+        restorationStage.theme.border,
+      ].join(" ")}
     >
       <div
         aria-live="polite"

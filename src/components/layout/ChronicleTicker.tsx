@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGameState } from "../hooks/UseGame";
 import { formatShireDate } from "../../utils/chronicleDates";
 import type { ChronicleEntry } from "../../types/Chronicle.types";
+import { useRestorationStage } from "../hooks/UseRestorationStage";
 
 type ChronicleTickerContentProps = {
   chronicleEntries: ChronicleEntry[];
@@ -40,6 +41,7 @@ function ChronicleTickerContent({
     );
   }, [chronicleEntries]);
 
+  const restorationStage = useRestorationStage();
   const [displayedMessages, setDisplayedMessages] = useState(liveMessages);
   const pendingMessagesRef = useRef(liveMessages);
   const hasPendingUpdateRef = useRef(false);
@@ -57,15 +59,39 @@ function ChronicleTickerContent({
   }
 
   return (
-    <footer className="shrink-0 border-t border-amber-200/10 bg-black/70 text-amber-100 shadow-[0_-0.5rem_1.5rem_rgba(0,0,0,0.35)]">
+    <footer
+      className={[
+        "shrink-0 border-t text-amber-100 shadow-[0_-0.5rem_1.5rem_rgba(0,0,0,0.35)] transition-colors duration-700",
+        restorationStage.theme.border,
+        restorationStage.theme.tickerBackground,
+      ].join(" ")}
+    >
       <div className="flex h-9 items-center gap-0 overflow-hidden px-3 md:h-11 md:gap-3 lg:h-12 lg:px-4">
-        <div className="hidden shrink-0 rounded-full border border-amber-300/30 bg-stone-950/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-amber-200/80 md:block md:text-xs">
-          The Shire Chronicle
+        <div
+          className={[
+            "hidden shrink-0 rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] shadow-sm transition-colors duration-700 md:block md:text-xs",
+            restorationStage.theme.panelBackground,
+            restorationStage.theme.border,
+            restorationStage.theme.accentText,
+          ].join(" ")}
+        >
+          {restorationStage.chronicleLabel}
         </div>
 
         <div className="relative isolate min-w-0 flex-1 overflow-hidden">
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-linear-to-r from-black/80 to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-linear-to-l from-black/80 to-transparent" />
+          <div
+            className={[
+              "pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-4 bg-linear-to-r to-transparent opacity-50 md:block",
+              restorationStage.theme.tickerFadeFrom,
+            ].join(" ")}
+          />
+
+          <div
+            className={[
+              "pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-4 bg-linear-to-l to-transparent opacity-50 md:block",
+              restorationStage.theme.tickerFadeFrom,
+            ].join(" ")}
+          />
 
           <div
             onAnimationIteration={handleTickerIteration}

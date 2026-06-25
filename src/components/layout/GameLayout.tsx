@@ -6,12 +6,14 @@ import { MainActionPanel } from "./MainActionPanel";
 import { UpgradeDrawer } from "./UpgradeDrawer";
 import { ChronicleTicker } from "./ChronicleTicker";
 import type { ResourceSpendFeedback } from "../../types/UI.types";
+import { useRestorationStage } from "../hooks/UseRestorationStage";
 
 export function GameLayout() {
   const [isUpgradePanelOpen, setIsUpgradePanelOpen] = useState(false);
   const [spendFeedback, setSpendFeedback] =
     useState<ResourceSpendFeedback | null>(null);
   const spendFeedbackIdRef = useRef(0);
+  const restorationStage = useRestorationStage();
 
   function getNextSpendFeedbackId() {
     spendFeedbackIdRef.current += 1;
@@ -41,7 +43,12 @@ export function GameLayout() {
   // ^^ Fix above once switch user button has been implemented
 
   return (
-    <main className="h-dvh overflow-hidden bg-stone-950 text-amber-50">
+    <main
+      className={[
+        "h-dvh overflow-hidden text-amber-50 transition-colors duration-700",
+        restorationStage.theme.appBackground,
+      ].join(" ")}
+    >
       <div className="flex h-full min-h-0 flex-col">
         <TopBar />
 
@@ -54,7 +61,12 @@ export function GameLayout() {
                 type="button"
                 onClick={() => setIsUpgradePanelOpen((current) => !current)}
                 aria-expanded={isUpgradePanelOpen}
-                className="cursor-pointer flex h-11 w-full items-center justify-center rounded-xl border border-amber-300/40 bg-stone-950/90 px-4 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900"
+                className={[
+                  "flex h-11 w-full cursor-pointer items-center justify-center rounded-xl border px-4 text-sm font-semibold shadow-lg transition hover:brightness-110",
+                  restorationStage.theme.panelBackground,
+                  restorationStage.theme.border,
+                  restorationStage.theme.accentText,
+                ].join(" ")}
               >
                 {isUpgradePanelOpen ? "Hide upgrades" : "Show upgrades"}
               </button>

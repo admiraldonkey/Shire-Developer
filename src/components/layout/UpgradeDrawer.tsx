@@ -1,4 +1,5 @@
 import { UpgradePanel } from "../game/UpgradePanel";
+import { useRestorationStage } from "../hooks/UseRestorationStage";
 
 type UpgradeDrawerProps = {
   isOpen: boolean;
@@ -11,6 +12,8 @@ export function UpgradeDrawer({
   onToggle,
   onUpgradePurchased,
 }: UpgradeDrawerProps) {
+  const restorationStage = useRestorationStage();
+
   return (
     <>
       {isOpen && (
@@ -26,7 +29,12 @@ export function UpgradeDrawer({
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="cursor-pointer absolute right-4 top-4 z-50 mt-2 mr-2 hidden rounded-full border border-amber-300/40 bg-stone-950/90 px-4 py-2 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 md:block"
+        className={[
+          "absolute right-4 top-4 z-50 mt-2 mr-2 hidden cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold shadow-lg transition hover:brightness-110 md:block",
+          restorationStage.theme.panelBackground,
+          restorationStage.theme.border,
+          restorationStage.theme.accentText,
+        ].join(" ")}
       >
         {isOpen ? "Hide upgrades" : "Show upgrades"}
       </button>
@@ -46,7 +54,12 @@ export function UpgradeDrawer({
             type="button"
             onClick={onToggle}
             aria-label="Close upgrades"
-            className="cursor-pointer absolute right-3 top-3 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-amber-300/40 bg-stone-950 text-lg font-bold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 md:hidden"
+            className={[
+              "absolute right-3 top-3 z-50 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border text-lg font-bold shadow-lg transition hover:brightness-110 md:hidden",
+              restorationStage.theme.panelBackground,
+              restorationStage.theme.border,
+              restorationStage.theme.accentText,
+            ].join(" ")}
           >
             ×
           </button>

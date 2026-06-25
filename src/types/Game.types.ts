@@ -35,6 +35,7 @@ export type GameState = {
   chronicleEntries: ChronicleEntry[];
   nextChronicleId: number;
   currentChronicleDate: ShireDate;
+  restorationPoints: number;
   upgrades: Upgrade[];
   isGameLoaded: boolean;
 };

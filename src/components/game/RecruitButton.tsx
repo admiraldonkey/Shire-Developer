@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useGameDispatch, useGameState } from "../hooks/UseGame";
 import type { ClickPopup } from "../../types/UI.types";
 import { getHobbitsPerClick } from "../../utils/gameCalculations";
+import { useRestorationStage } from "../hooks/UseRestorationStage";
 
 export function RecruitButton() {
   const { upgrades } = useGameState();
   const dispatch = useGameDispatch();
+  const restorationStage = useRestorationStage();
 
   const hobbitsPerClick = getHobbitsPerClick(upgrades);
 
@@ -37,10 +39,13 @@ export function RecruitButton() {
         type="button"
         onClick={handleRecruit}
         className={[
-          "cursor-pointer relative rounded-full border-4 border-amber-300/50 bg-green-900",
+          "relative rounded-full border-4 transition",
           "h-[clamp(7rem,32vw,9rem)] w-[clamp(7rem,32vw,9rem)] sm:h-44 sm:w-44 lg:h-52 lg:w-52",
-          "shadow-2xl shadow-amber-950/50 transition",
-          "hover:scale-105 active:scale-95",
+          "cursor-pointer hover:scale-105 active:scale-95",
+          restorationStage.theme.recruitButton,
+          restorationStage.theme.border,
+          restorationStage.theme.recruitButtonGlow,
+          "shadow-2xl",
         ].join(" ")}
       >
         <span className="block text-base font-bold text-amber-100 sm:text-lg">
