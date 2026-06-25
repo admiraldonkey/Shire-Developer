@@ -29,6 +29,7 @@ export type Upgrade = {
 };
 
 export type GameState = {
+  saveVersion: number;
   hobbits: number;
   hobbitsPerSecond: number;
   hobbitsPerClick: number;

@@ -8,10 +8,11 @@ import {
 import { useUserState } from "../hooks/UseUser";
 import type { ApiUpgrade } from "../../types/Game.types";
 import { createInitialUpgrades } from "../../utils/upgradeMappers";
+import { hydrateSavedGame } from "../../utils/hydrateSaveGame";
 
 const ENABLE_PASSIVE_TICKER = true;
 
-const loadGameFromStorage = (username: string): GameState | null => {
+const loadGameFromStorage = (username: string): Partial<GameState> | null => {
   console.log("loading from storage...");
 
   const data = localStorage.getItem(username);
@@ -63,17 +64,7 @@ export const GameProvider = ({ children }: GameContextProviderProps) => {
 
     const activeUsername = username;
 
-    const saved = loadGameFromStorage(activeUsername);
-
-    if (saved) {
-      console.log("User was pulled from storage");
-      dispatch({ type: "LOAD_GAME", payload: saved });
-      return;
-    }
-
-    console.log("user did not exist in storage");
-
-    async function fetchUpgrades() {
+    async function initialiseGame() {
       try {
         const response = await fetch(
           "https://cookie-upgrade-api.vercel.app/api/upgrades",
@@ -84,21 +75,37 @@ export const GameProvider = ({ children }: GameContextProviderProps) => {
         }
 
         const apiUpgrades: ApiUpgrade[] = await response.json();
-        const upgrades = createInitialUpgrades(apiUpgrades);
+        const baseUpgrades = createInitialUpgrades(apiUpgrades);
 
-        const newGameState = {
+        const saved = loadGameFromStorage(activeUsername);
+
+        if (saved) {
+          console.log("User was pulled from storage");
+
+          const hydratedSavedGame = hydrateSavedGame(saved, baseUpgrades);
+
+          dispatch({ type: "LOAD_GAME", payload: hydratedSavedGame });
+          saveGameToStorage(activeUsername, hydratedSavedGame);
+
+          return;
+        }
+
+        console.log("user did not exist in storage");
+
+        const newGameState: GameState = {
           ...initialGameState,
-          upgrades,
+          upgrades: baseUpgrades,
+          isGameLoaded: true,
         };
 
         dispatch({ type: "LOAD_GAME", payload: newGameState });
         saveGameToStorage(activeUsername, newGameState);
       } catch (error) {
-        console.error("Failed to initialise upgrades:", error);
+        console.error("Failed to initialise game:", error);
       }
     }
 
-    fetchUpgrades();
+    initialiseGame();
   }, [username]);
 
   return (
