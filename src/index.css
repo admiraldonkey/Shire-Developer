@@ -472,3 +472,15 @@
   transform: translate3d(100vw, 0, 0);
   animation: chronicle-marquee 50s linear infinite;
 }
+
+@media (min-width: 1024px) {
+  .chronicle-marquee {
+    animation-duration: 60s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chronicle-marquee {
+    animation: none;
+    transform: none;
+  }
+}
