@@ -15,6 +15,7 @@ export const initialGameState: GameState = {
   chronicleEntries: [],
   nextChronicleId: 1,
   currentChronicleDate: INITIAL_CHRONICLE_DATE,
+  restorationPoints: 0,
   upgrades: [],
   isGameLoaded: false,
 };
@@ -57,13 +58,20 @@ export const gameReducer = (
         (upgrade) => upgrade.id === action.payload,
       );
 
-      if (!upgradeToBuy || state.hobbits < upgradeToBuy.costNext) {
+      if (!upgradeToBuy) {
+        return state;
+      }
+
+      const cost = Math.ceil(upgradeToBuy.costNext);
+
+      if (state.hobbits < cost) {
         return state;
       }
 
       return {
         ...state,
-        hobbits: state.hobbits - upgradeToBuy.costNext,
+        hobbits: state.hobbits - cost,
+        restorationPoints: state.restorationPoints + cost,
         upgrades: state.upgrades.map((upgrade) => {
           if (upgrade.id !== action.payload) {
             return upgrade;
@@ -112,6 +120,7 @@ export const gameReducer = (
         nextChronicleId: action.payload.nextChronicleId ?? 1,
         currentChronicleDate:
           action.payload.currentChronicleDate ?? INITIAL_CHRONICLE_DATE,
+        restorationPoints: action.payload.restorationPoints ?? 0,
       };
     // Game data is reset to default game state
     case "RESET":

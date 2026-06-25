@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useUserState, useUserDispatch } from "../hooks/UseUser";
 import { useGameDispatch, useGameState } from "../hooks/UseGame";
+import { useRestorationStage } from "../hooks/UseRestorationStage";
 
 export function TopBar() {
   const { currentUser } = useUserState();
   const gameState = useGameState();
   const dispatchGame = useGameDispatch();
   const dispatchUser = useUserDispatch();
+  const restorationStage = useRestorationStage();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +77,13 @@ export function TopBar() {
   }
 
   return (
-    <header className="relative z-[100] shrink-0 border-b border-amber-200/10 bg-black/80 px-4 py-3 text-amber-100 shadow-lg backdrop-blur">
+    <header
+      className={[
+        "relative z-[100] shrink-0 border-b px-4 py-3 text-amber-100 shadow-lg backdrop-blur transition-colors duration-700",
+        restorationStage.theme.panelBackground,
+        restorationStage.theme.border,
+      ].join(" ")}
+    >
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
           <p className="truncate text-sm font-bold tracking-wide text-amber-100 sm:text-base">
@@ -96,7 +104,12 @@ export function TopBar() {
             onClick={() => setIsMenuOpen((current) => !current)}
             aria-expanded={isMenuOpen}
             aria-haspopup="menu"
-            className="cursor-pointer flex h-10 items-center justify-center rounded-full border border-amber-300/40 bg-stone-950/90 px-3 text-sm font-semibold text-amber-100 shadow-lg transition hover:border-amber-200 hover:bg-stone-900 sm:px-4"
+            className={[
+              "flex h-10 cursor-pointer items-center justify-center rounded-full border px-3 text-sm font-semibold shadow-lg transition hover:brightness-110 sm:px-4",
+              restorationStage.theme.panelBackground,
+              restorationStage.theme.border,
+              restorationStage.theme.accentText,
+            ].join(" ")}
           >
             <span className="sm:hidden" aria-hidden="true">
               ⚙
@@ -110,7 +123,11 @@ export function TopBar() {
           {isMenuOpen && (
             <div
               role="menu"
-              className="absolute right-0 z-110 mt-2 w-56 overflow-hidden rounded-2xl border border-amber-200/20 bg-stone-950/95 p-2 shadow-2xl backdrop-blur"
+              className={[
+                "absolute right-0 z-[110] mt-2 w-56 overflow-hidden rounded-2xl border p-2 shadow-2xl backdrop-blur",
+                restorationStage.theme.panelBackground,
+                restorationStage.theme.border,
+              ].join(" ")}
             >
               <MenuButton onClick={handleSaveGame}>Save Game</MenuButton>
               <MenuButton onClick={handleLoadGame}>Load Game</MenuButton>
