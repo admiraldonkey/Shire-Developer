@@ -11,7 +11,7 @@ function AppContent() {
     return <SplashScreen />;
   }
   return (
-    <GameProvider>
+    <GameProvider key={currentUser.name}>
       <GameLayout />
     </GameProvider>
   );

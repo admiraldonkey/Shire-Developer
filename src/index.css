@@ -484,3 +484,58 @@
     transform: none;
   }
 }
+
+/* =========================
+     Restoration Decorations
+     ========================= */
+
+.shire-firefly {
+  position: absolute;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 9999px;
+  background: rgba(253, 224, 71, 0.9);
+  box-shadow: 0 0 0.75rem rgba(253, 224, 71, 0.9);
+  animation: firefly-drift 5s ease-in-out infinite alternate;
+}
+
+.shire-leaf {
+  position: absolute;
+  width: 4rem;
+  height: 4rem;
+  border-top: 1px solid rgba(190, 242, 100, 0.2);
+  border-left: 1px solid rgba(190, 242, 100, 0.15);
+  border-radius: 9999px 0 9999px 0;
+  transform: rotate(25deg);
+  opacity: 0.55;
+}
+
+.animation-delay-700 {
+  animation-delay: 700ms;
+}
+
+.animation-delay-1200 {
+  animation-delay: 1200ms;
+}
+
+@keyframes firefly-drift {
+  0% {
+    opacity: 0.25;
+    transform: translate3d(0, 0, 0) scale(0.85);
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0.45;
+    transform: translate3d(0.75rem, -0.5rem, 0) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shire-firefly {
+    animation: none;
+  }
+}

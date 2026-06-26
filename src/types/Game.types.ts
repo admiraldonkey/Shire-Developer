@@ -1,3 +1,5 @@
+import type { RestorationStageId } from "./Restoration.types";
+
 export type UpgradeCategory = "passive" | "click";
 export type UpgradeEffectType = "hobbitsPerSecond" | "hobbitsPerClick";
 import type {
@@ -28,6 +30,12 @@ export type Upgrade = {
   };
 };
 
+// type SavedUpgradeProgress = {
+//   id: number;
+//   owned: number;
+//   costNext: number;
+// };
+
 export type GameState = {
   saveVersion: number;
   hobbits: number;
@@ -37,7 +45,9 @@ export type GameState = {
   nextChronicleId: number;
   currentChronicleDate: ShireDate;
   restorationPoints: number;
+  stageMilestonesSeen: RestorationStageId[];
   upgrades: Upgrade[];
+  // upgradeProgress: SavedUpgradeProgress[];
   isGameLoaded: boolean;
 };
 
@@ -53,6 +63,10 @@ export type GameAction =
         message: string;
         dayAdvance?: number;
       };
+    }
+  | {
+      type: "MARK_RESTORATION_STAGE_SEEN";
+      payload: RestorationStageId;
     }
   | { type: "CHEAT" }
   | { type: "LOAD_GAME"; payload: GameState }

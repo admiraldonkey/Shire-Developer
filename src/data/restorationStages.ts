@@ -8,6 +8,7 @@ export const RESTORATION_STAGES: RestorationStage[] = [
     mainTitle: "Rebuild what was lost",
     mainDescription:
       "The lanes are scarred and the fields lie quiet, but every willing hand brings warmth back beneath the hill.",
+    milestoneMessage: "The work of restoring the Shire begins",
     chronicleLabel: "Westfarthing Times",
     theme: {
       appBackground:
@@ -38,6 +39,8 @@ export const RESTORATION_STAGES: RestorationStage[] = [
     mainTitle: "The first hearths are lit",
     mainDescription:
       "Smoke curls from mended chimneys, and the first warm windows begin to glow against the dark.",
+    milestoneMessage:
+      "The first hearths are lit again, and warm windows begin to answer the dark",
     chronicleLabel: "Bywater Notices",
     theme: {
       appBackground:
@@ -68,6 +71,8 @@ export const RESTORATION_STAGES: RestorationStage[] = [
     mainTitle: "Green returns to the fields",
     mainDescription:
       "Fresh shoots break through the turned earth, and the Shire begins to remember its own colour.",
+    milestoneMessage:
+      "Green shoots return to the fields, and the Shire begins to remember its colour",
     chronicleLabel: "Four Farthings Report",
     theme: {
       appBackground:
@@ -98,6 +103,8 @@ export const RESTORATION_STAGES: RestorationStage[] = [
     mainTitle: "Bywater rises again",
     mainDescription:
       "Paths are cleared, gardens are replanted, and neighbours gather where silence had taken root.",
+    milestoneMessage:
+      "Bywater rises again as paths are cleared, gardens replanted, and neighbours gather",
     chronicleLabel: "Bywater Chronicle",
     theme: {
       appBackground:
@@ -128,6 +135,7 @@ export const RESTORATION_STAGES: RestorationStage[] = [
     mainTitle: "The Four Farthings stir",
     mainDescription:
       "Word of renewal spreads from field to lane, from mill to market, from hearth to hearth.",
+    milestoneMessage: "Word of restoration spreads across the Four Farthings",
     chronicleLabel: "The Shire Chronicle",
     theme: {
       appBackground:
@@ -158,6 +166,8 @@ export const RESTORATION_STAGES: RestorationStage[] = [
     mainTitle: "The Shire enters a golden year",
     mainDescription:
       "The harvests swell, the trees grow tall, and laughter returns to every road and round green door.",
+    milestoneMessage:
+      "The Shire enters a golden year of harvest, laughter, and full tables",
     chronicleLabel: "Golden Year Chronicle",
     theme: {
       appBackground:
@@ -188,6 +198,8 @@ export const RESTORATION_STAGES: RestorationStage[] = [
     mainTitle: "The Shire flourishes in peace",
     mainDescription:
       "Green hills, bright gardens, full tables, and quiet roads mark a land restored to itself.",
+    milestoneMessage:
+      "The Shire flourishes in peace, restored to green hills and quiet roads",
     chronicleLabel: "Free Land Chronicle",
     theme: {
       appBackground:

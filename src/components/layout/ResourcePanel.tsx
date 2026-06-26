@@ -7,14 +7,16 @@ import {
 } from "../../utils/gameCalculations";
 import type { ResourceSpendFeedback } from "../../types/UI.types";
 import { useRestorationStage } from "../hooks/UseRestorationStage";
+import { getRestorationProgress } from "../../utils/getRestorationProgress";
 
 type ResourcePanelProps = {
   spendFeedback?: ResourceSpendFeedback | null;
 };
 
 export function ResourcePanel({ spendFeedback }: ResourcePanelProps) {
-  const { hobbits, upgrades } = useGameState();
+  const { hobbits, upgrades, restorationPoints } = useGameState();
   const restorationStage = useRestorationStage();
+  const restorationProgress = getRestorationProgress(restorationPoints);
 
   const hobbitsPerClick = getHobbitsPerClick(upgrades);
   const hobbitsPerSecond = getHobbitsPerSecond(upgrades);
@@ -36,6 +38,26 @@ export function ResourcePanel({ spendFeedback }: ResourcePanelProps) {
         <span className="hidden min-w-0 max-w-36 items-center justify-center truncate rounded-full border border-amber-200/20 bg-black/20 px-3 py-1 text-center text-[10px] font-semibold leading-none text-amber-100/70 sm:inline-flex">
           {restorationStage.name}
         </span>
+      </div>
+      <div className="mb-3 rounded-2xl border border-amber-200/10 bg-black/20 p-2.5">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-amber-100/55">
+            Restoration
+          </p>
+
+          <p className="text-[10px] text-amber-100/55">
+            {restorationProgress.nextStage
+              ? `${restorationProgress.pointsUntilNextStage.toLocaleString()} to next stage`
+              : "Fully restored"}
+          </p>
+        </div>
+
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-black/40">
+          <div
+            className="h-full rounded-full bg-amber-200/80 transition-all duration-700"
+            style={{ width: `${restorationProgress.progressPercent}%` }}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:gap-3">

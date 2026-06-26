@@ -7,6 +7,7 @@ import { UpgradeDrawer } from "./UpgradeDrawer";
 import { ChronicleTicker } from "./ChronicleTicker";
 import type { ResourceSpendFeedback } from "../../types/UI.types";
 import { useRestorationStage } from "../hooks/UseRestorationStage";
+import { RestorationDecorations } from "./RestorationDecorations";
 
 export function GameLayout() {
   const [isUpgradePanelOpen, setIsUpgradePanelOpen] = useState(false);
@@ -53,6 +54,8 @@ export function GameLayout() {
         <TopBar />
 
         <div className="relative flex min-h-0 flex-1 flex-col gap-2.5 overflow-hidden p-2.5 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-4 lg:p-4">
+          <RestorationDecorations />
+
           <ResourcePanel spendFeedback={spendFeedback} />
 
           <div className="flex min-h-0 flex-1 flex-col gap-3 lg:contents">

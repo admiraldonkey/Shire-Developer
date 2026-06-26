@@ -1,17 +1,38 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGameState } from "../hooks/UseGame";
-import { formatShireDate } from "../../utils/chronicleDates";
-import type { ChronicleEntry } from "../../types/Chronicle.types";
 import { useRestorationStage } from "../hooks/UseRestorationStage";
+import type { ChronicleEntry } from "../../types/Chronicle.types";
+import {
+  INITIAL_CHRONICLE_DATE,
+  formatShireDate,
+} from "../../utils/chronicleDates";
 
 type ChronicleTickerContentProps = {
   chronicleEntries: ChronicleEntry[];
 };
 
-const DEFAULT_CHRONICLE_MESSAGES = [
-  "Restoration notices will appear here as the Shire begins to mend",
-  "Bywater residents are encouraged to report damaged fences, empty pantries, and suspiciously idle cousins",
-  "The Four Farthings await willing hands, warm hearths, and a troubling amount of paperwork",
+const DEFAULT_CHRONICLE_ENTRIES: ChronicleEntry[] = [
+  {
+    id: -1,
+    type: "system",
+    date: INITIAL_CHRONICLE_DATE,
+    message:
+      "Restoration notices will appear here as the Shire begins to mend.",
+  },
+  {
+    id: -2,
+    type: "system",
+    date: INITIAL_CHRONICLE_DATE,
+    message:
+      "Bywater residents are encouraged to report damaged fences, empty pantries, and suspiciously idle cousins.",
+  },
+  {
+    id: -3,
+    type: "system",
+    date: INITIAL_CHRONICLE_DATE,
+    message:
+      "The Four Farthings await willing hands, warm hearths, and a troubling amount of paperwork.",
+  },
 ];
 
 export function ChronicleTicker() {
@@ -31,30 +52,27 @@ export function ChronicleTicker() {
 function ChronicleTickerContent({
   chronicleEntries,
 }: ChronicleTickerContentProps) {
-  const liveMessages = useMemo(() => {
-    if (chronicleEntries.length === 0) {
-      return DEFAULT_CHRONICLE_MESSAGES;
-    }
+  const restorationStage = useRestorationStage();
 
-    return chronicleEntries.map(
-      (entry) => `${formatShireDate(entry.date)} | ${entry.message}`,
-    );
+  const liveEntries = useMemo(() => {
+    return chronicleEntries.length > 0
+      ? chronicleEntries
+      : DEFAULT_CHRONICLE_ENTRIES;
   }, [chronicleEntries]);
 
-  const restorationStage = useRestorationStage();
-  const [displayedMessages, setDisplayedMessages] = useState(liveMessages);
-  const pendingMessagesRef = useRef(liveMessages);
+  const [displayedEntries, setDisplayedEntries] = useState(liveEntries);
+  const pendingEntriesRef = useRef(liveEntries);
   const hasPendingUpdateRef = useRef(false);
 
   useEffect(() => {
-    pendingMessagesRef.current = liveMessages;
+    pendingEntriesRef.current = liveEntries;
     hasPendingUpdateRef.current = true;
-  }, [liveMessages]);
+  }, [liveEntries]);
 
   function handleTickerIteration() {
     if (!hasPendingUpdateRef.current) return;
 
-    setDisplayedMessages(pendingMessagesRef.current);
+    setDisplayedEntries(pendingEntriesRef.current);
     hasPendingUpdateRef.current = false;
   }
 
@@ -95,16 +113,33 @@ function ChronicleTickerContent({
 
           <div
             onAnimationIteration={handleTickerIteration}
-            className="chronicle-marquee whitespace-nowrap text-xs text-amber-100/75 md:text-sm"
+            className="chronicle-marquee text-xs text-amber-100/75 md:text-sm"
           >
-            {displayedMessages.map((message, index) => (
+            {displayedEntries.map((entry, index) => (
               <span
-                key={`${message}-${index}`}
-                className="inline-flex shrink-0 items-center"
+                key={`${entry.id}-${index}`}
+                className={[
+                  "inline-flex shrink-0 items-center",
+                  entry.type === "milestone"
+                    ? "text-amber-50"
+                    : "text-amber-100/75",
+                ].join(" ")}
               >
-                <span>{message}</span>
+                {entry.type === "milestone" && (
+                  <span className="mr-2 rounded-full border border-amber-300/40 bg-amber-300/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.18em] text-amber-100">
+                    Milestone
+                  </span>
+                )}
 
-                {index < displayedMessages.length - 1 && (
+                <span className="shrink-0 font-semibold text-amber-200/80">
+                  {formatShireDate(entry.date)}
+                </span>
+
+                <span className="mx-2 shrink-0 text-amber-200/40">|</span>
+
+                <span className="shrink-0">{entry.message}</span>
+
+                {index < displayedEntries.length - 1 && (
                   <span
                     aria-hidden="true"
                     className="mx-6 shrink-0 text-amber-200/45 md:mx-8"

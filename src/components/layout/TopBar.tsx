@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useUserState, useUserDispatch } from "../hooks/UseUser";
 import { useGameDispatch, useGameState } from "../hooks/UseGame";
 import { useRestorationStage } from "../hooks/UseRestorationStage";
+import { saveGameToStorage } from "../../utils/storage";
+import { loadHydratedGameFromStorage } from "../../utils/gameInitialisation";
+import { devLog } from "../../utils/devLog";
 
 export function TopBar() {
   const { currentUser } = useUserState();
@@ -38,25 +41,38 @@ export function TopBar() {
   }, []);
 
   function handleSaveGame() {
-    if (currentUser) {
-      const data = { ...currentUser, gameState: gameState };
-      localStorage.setItem(currentUser.name, JSON.stringify(data));
+    if (!currentUser) {
+      console.warn("Cannot save without a current user.");
+      setIsMenuOpen(false);
+      return;
     }
+
+    saveGameToStorage(currentUser.name, gameState);
+
     setIsMenuOpen(false);
   }
 
-  function handleLoadGame() {
-    if (currentUser) {
-      const savedData = localStorage.getItem(currentUser.name);
-      if (savedData) {
-        const parsed = JSON.parse(savedData).gameState;
-        dispatchGame({ type: "LOAD_GAME", payload: parsed });
-      } else {
-        console.log("No save data found");
-      }
-    } else {
-      console.log("User not found");
+  async function handleLoadGame() {
+    if (!currentUser) {
+      devLog("User not found");
+      setIsMenuOpen(false);
+      return;
     }
+
+    try {
+      const hydratedGame = await loadHydratedGameFromStorage(currentUser.name);
+
+      if (!hydratedGame) {
+        devLog("No save data found");
+        setIsMenuOpen(false);
+        return;
+      }
+
+      dispatchGame({ type: "LOAD_GAME", payload: hydratedGame });
+    } catch (error) {
+      console.error("Failed to load saved game:", error);
+    }
+
     setIsMenuOpen(false);
   }
 
@@ -71,7 +87,7 @@ export function TopBar() {
       dispatchUser({ type: "DELETE" });
       dispatchGame({ type: "RESET" });
     } else {
-      console.log("User not found");
+      devLog("User not found");
     }
     setIsMenuOpen(false);
   }

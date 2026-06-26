@@ -18,6 +18,7 @@ export const initialGameState: GameState = {
   nextChronicleId: 1,
   currentChronicleDate: INITIAL_CHRONICLE_DATE,
   restorationPoints: 0,
+  stageMilestonesSeen: [],
   upgrades: [],
   isGameLoaded: false,
 };
@@ -108,6 +109,17 @@ export const gameReducer = (
         nextChronicleId: state.nextChronicleId + 1,
       };
     }
+    // Track restoration stages achieved for reporting milestones
+    case "MARK_RESTORATION_STAGE_SEEN": {
+      if (state.stageMilestonesSeen.includes(action.payload)) {
+        return state;
+      }
+
+      return {
+        ...state,
+        stageMilestonesSeen: [...state.stageMilestonesSeen, action.payload],
+      };
+    }
     // Quick way to add 10,000 hobbits to user
     case "CHEAT":
       return { ...state, hobbits: state.hobbits + 10000 };
@@ -123,6 +135,7 @@ export const gameReducer = (
         currentChronicleDate:
           action.payload.currentChronicleDate ?? INITIAL_CHRONICLE_DATE,
         restorationPoints: action.payload.restorationPoints ?? 0,
+        stageMilestonesSeen: action.payload.stageMilestonesSeen ?? [],
       };
     // Game data is reset to default game state
     case "RESET":
