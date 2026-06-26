@@ -4,6 +4,7 @@ import { UpgradeCard } from "./UpgradeCard";
 import type { Upgrade } from "../../types/Game.types";
 import { getUpgradeChronicleDayAdvance } from "../../utils/chronicleDates";
 import { useRestorationStage } from "../hooks/UseRestorationStage";
+import { getRestorationStage } from "../../utils/getRestorationStage";
 
 const UPGRADE_FILTERS = ["all", "passive", "click"] as const;
 
@@ -14,7 +15,8 @@ type UpgradePanelProps = {
 };
 
 export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
-  const { hobbits, upgrades } = useGameState();
+  const { hobbits, upgrades, restorationPoints, stageMilestonesSeen } =
+    useGameState();
   const dispatch = useGameDispatch();
   const restorationStage = useRestorationStage();
 
@@ -347,6 +349,10 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
       return;
     }
 
+    const currentStage = getRestorationStage(restorationPoints);
+    const nextRestorationPoints = restorationPoints + cost;
+    const nextStage = getRestorationStage(nextRestorationPoints);
+
     dispatch({ type: "BUY_UPGRADE", payload: upgrade.id });
 
     dispatch({
@@ -358,10 +364,32 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
       },
     });
 
+    if (
+      nextStage.id !== currentStage.id &&
+      !stageMilestonesSeen.includes(nextStage.id)
+    ) {
+      dispatch({
+        type: "ADD_CHRONICLE_ENTRY",
+        payload: {
+          type: "milestone",
+          message: nextStage.milestoneMessage ?? nextStage.mainDescription,
+          dayAdvance: 1,
+        },
+      });
+
+      dispatch({
+        type: "MARK_RESTORATION_STAGE_SEEN",
+        payload: nextStage.id,
+      });
+
+      showDeckNotice("success", `${nextStage.name} reached!`);
+    } else {
+      showDeckNotice("success", "Upgrade purchased!");
+    }
+
     onUpgradePurchased(cost);
     showMobileSpendFeedback(cost);
     showRecentPurchase(upgrade.id);
-    showDeckNotice("success", "Upgrade purchased!");
   }
 
   function handleKeyboardNavigation(event: React.KeyboardEvent<HTMLElement>) {

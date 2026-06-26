@@ -24,19 +24,19 @@ Will you help rebuild what was lost and bring comfort, peace, and prosperity bac
 - Collapsible/overlay upgrade drawer
 - Upgrade deck keyboard navigation
 - Options menu for save/load/testing actions
+- Restoration stages to drive dynamic UI changes
 
 ## In Progress
 
 - Keyboard-first interaction
 - Improved purchase feedback
-- Restoration stages to drive dynamic UI changes
+- Dynamic visual progression as the Shire is restored
+- Themed Chronicle entries and milestone messages
 - Full visual polish: cards, textures, typography, atmosphere, and artwork
 - Accessibility-minded design, with ongoing WCAG-focused improvements
 
 ## Planned Features
 
-- Dynamic visual progression as the Shire is restored
-- Themed Chronicle entries and milestone messages
 - Sound and music options
 - Reduced motion / accessibility settings
 - Planned support for mouse, keyboard, and touch interaction

@@ -5,7 +5,7 @@ export type StatCardProps = {
 };
 
 export type ClickPopup = {
-  id: number;
+  id: string;
   value: number;
   x: number;
   y: number;

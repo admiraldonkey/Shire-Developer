@@ -11,10 +11,6 @@ export const Upgrades = () => {
     if (!upgrade) return;
     if (hobbits >= upgrade.costNext) {
       dispatch({ type: "BUY_UPGRADE", payload: id });
-    } else {
-      console.log(
-        `You need another ${upgrade.costNext - hobbits} hobbits to buy ${upgrade.name}!`,
-      );
     }
   };
 

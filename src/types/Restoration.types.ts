@@ -13,6 +13,7 @@ export type RestorationStage = {
   minRestorationPoints: number;
   mainTitle: string;
   mainDescription: string;
+  milestoneMessage?: string;
   chronicleLabel: string;
   theme: {
     appBackground: string;

@@ -1,10 +1,15 @@
+import type { Ref } from "react";
 import { useState } from "react";
 import { useGameDispatch, useGameState } from "../hooks/UseGame";
 import type { ClickPopup } from "../../types/UI.types";
 import { getHobbitsPerClick } from "../../utils/gameCalculations";
 import { useRestorationStage } from "../hooks/UseRestorationStage";
 
-export function RecruitButton() {
+type RecruitButtonProps = {
+  buttonRef?: Ref<HTMLButtonElement>;
+};
+
+export function RecruitButton({ buttonRef }: RecruitButtonProps) {
   const { upgrades } = useGameState();
   const dispatch = useGameDispatch();
   const restorationStage = useRestorationStage();
@@ -15,15 +20,21 @@ export function RecruitButton() {
 
   function handleRecruit(event: React.MouseEvent<HTMLButtonElement>) {
     dispatch({ type: "CLICK_HOBBITS" });
-    console.log(hobbitsPerClick);
 
     const buttonRect = event.currentTarget.getBoundingClientRect();
 
+    const wasKeyboardOrProgrammaticClick =
+      event.clientX === 0 && event.clientY === 0;
+
     const popup: ClickPopup = {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       value: hobbitsPerClick,
-      x: event.clientX - buttonRect.left,
-      y: event.clientY - buttonRect.top,
+      x: wasKeyboardOrProgrammaticClick
+        ? buttonRect.width / 2
+        : event.clientX - buttonRect.left,
+      y: wasKeyboardOrProgrammaticClick
+        ? buttonRect.height / 2
+        : event.clientY - buttonRect.top,
     };
 
     setPopups((current) => [...current, popup]);
@@ -36,6 +47,7 @@ export function RecruitButton() {
   return (
     <div className="relative">
       <button
+        ref={buttonRef}
         type="button"
         onClick={handleRecruit}
         className={[

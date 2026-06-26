@@ -1,42 +1,13 @@
 import { useEffect, useReducer } from "react";
 import { gameReducer, initialGameState } from "../reducers/GameReducer";
 import { GameContext } from "./Contexts";
-import {
-  type GameContextProviderProps,
-  type GameState,
-} from "../../types/Game.types";
+import { type GameContextProviderProps } from "../../types/Game.types";
 import { useUserState } from "../hooks/UseUser";
-import type { ApiUpgrade } from "../../types/Game.types";
-import { createInitialUpgrades } from "../../utils/upgradeMappers";
-import { hydrateSavedGame } from "../../utils/hydrateSaveGame";
+import { initialiseGameForUser } from "../../utils/gameInitialisation";
+import { saveGameToStorage } from "../../utils/storage";
+import { devLog } from "../../utils/devLog";
 
 const ENABLE_PASSIVE_TICKER = true;
-
-const loadGameFromStorage = (username: string): Partial<GameState> | null => {
-  console.log("loading from storage...");
-
-  const data = localStorage.getItem(username);
-
-  console.log("retrieved data is: ", data);
-
-  if (!data) return null;
-
-  try {
-    const parsed = JSON.parse(data);
-    return parsed.gameState || null;
-  } catch (error) {
-    console.error("Failed to parse saved game:", error);
-    return null;
-  }
-};
-
-const saveGameToStorage = (username: string, gameState: GameState) => {
-  const storageObj = {
-    gameState,
-  };
-
-  localStorage.setItem(username, JSON.stringify(storageObj));
-};
 
 // Readme outlines why game state & dispatch were combined into a single provider
 export const GameProvider = ({ children }: GameContextProviderProps) => {
@@ -62,50 +33,38 @@ export const GameProvider = ({ children }: GameContextProviderProps) => {
   useEffect(() => {
     if (!username) return;
 
+    let isCancelled = false;
     const activeUsername = username;
 
     async function initialiseGame() {
       try {
-        const response = await fetch(
-          "https://cookie-upgrade-api.vercel.app/api/upgrades",
-        );
+        const { gameState, wasLoadedFromStorage } =
+          await initialiseGameForUser(activeUsername);
 
-        if (!response.ok) {
-          throw new Error(`Upgrade API failed with status ${response.status}`);
-        }
-
-        const apiUpgrades: ApiUpgrade[] = await response.json();
-        const baseUpgrades = createInitialUpgrades(apiUpgrades);
-
-        const saved = loadGameFromStorage(activeUsername);
-
-        if (saved) {
-          console.log("User was pulled from storage");
-
-          const hydratedSavedGame = hydrateSavedGame(saved, baseUpgrades);
-
-          dispatch({ type: "LOAD_GAME", payload: hydratedSavedGame });
-          saveGameToStorage(activeUsername, hydratedSavedGame);
-
+        if (isCancelled) {
           return;
         }
 
-        console.log("user did not exist in storage");
+        devLog(
+          wasLoadedFromStorage
+            ? "User was pulled from storage"
+            : "User did not exist in storage",
+        );
 
-        const newGameState: GameState = {
-          ...initialGameState,
-          upgrades: baseUpgrades,
-          isGameLoaded: true,
-        };
+        dispatch({ type: "LOAD_GAME", payload: gameState });
 
-        dispatch({ type: "LOAD_GAME", payload: newGameState });
-        saveGameToStorage(activeUsername, newGameState);
+        // This also rewrites older/full saves into the compact upgradeProgress format.
+        saveGameToStorage(activeUsername, gameState);
       } catch (error) {
         console.error("Failed to initialise game:", error);
       }
     }
 
     initialiseGame();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [username]);
 
   return (

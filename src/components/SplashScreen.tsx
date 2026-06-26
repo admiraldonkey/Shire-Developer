@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useUserDispatch } from "./hooks/UseUser";
-import type { User } from "../types/User.types";
 import noise from "/textures/noise.png";
 import { Fireflies } from "./Fireflies";
+import { getNormalisedStoredUser, saveUserToStorage } from "../utils/storage";
 
 export const SplashScreen = () => {
   const dispatch = useUserDispatch();
@@ -22,25 +22,14 @@ export const SplashScreen = () => {
 
     setError("");
 
-    const savedData = localStorage.getItem(trimmedName);
+    const user = getNormalisedStoredUser(trimmedName);
 
-    if (savedData) {
-      dispatch({
-        type: "SET_USER",
-        payload: JSON.parse(savedData),
-      });
-    } else {
-      const newUser: User = {
-        name: trimmedName,
-      };
+    saveUserToStorage(trimmedName, user);
 
-      dispatch({
-        type: "SET_USER",
-        payload: newUser,
-      });
-
-      localStorage.setItem(trimmedName, JSON.stringify(newUser));
-    }
+    dispatch({
+      type: "SET_USER",
+      payload: user,
+    });
   };
 
   return (
