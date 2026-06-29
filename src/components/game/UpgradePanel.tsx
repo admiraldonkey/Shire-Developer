@@ -28,7 +28,7 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
 
   type DeckNotice = {
     id: number;
-    type: "success" | "warning";
+    type: "success" | "warning" | "milestone";
     message: string;
   };
 
@@ -382,7 +382,7 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
         payload: nextStage.id,
       });
 
-      showDeckNotice("success", `${nextStage.name} reached!`);
+      showDeckNotice("milestone", `${nextStage.name} reached!`);
     } else {
       showDeckNotice("success", "Upgrade purchased!");
     }
@@ -499,7 +499,9 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
               "mx-auto max-w-sm rounded-full border px-4 py-2 text-center text-sm font-semibold shadow-lg animate-[notice-pop_1600ms_ease-out_forwards]",
               deckNotice.type === "success"
                 ? "border-green-300/40 bg-green-950/90 text-green-100"
-                : "border-amber-300/40 bg-amber-950/90 text-amber-100",
+                : deckNotice.type === "warning"
+                  ? "border-amber-300/40 bg-amber-950/90 text-amber-100"
+                  : "border-yellow-200/60 bg-yellow-950/95 text-yellow-50 shadow-yellow-900/30",
             ].join(" ")}
           >
             {deckNotice.message}
@@ -524,14 +526,20 @@ export function UpgradePanel({ onUpgradePurchased }: UpgradePanelProps) {
         </div>
       </div>
       <div className="shrink-0">
-        <h2 className="text-base font-semibold text-amber-100 md:text-lg">
-          Rebuild the Shire
-        </h2>
+        <div>
+          <div>
+            <h2 className="text-base font-semibold text-amber-100 md:text-lg">
+              Rebuild the Shire
+            </h2>
 
-        <p className="mt-1 hidden text-sm text-amber-100/60 md:block">
-          Invest in comfort, community, and second breakfast logistics.
-        </p>
-
+            <p className="mt-1 hidden text-sm text-amber-100/60 md:block">
+              Invest in comfort, community, and second breakfast logistics.
+            </p>
+          </div>
+          <span className="shrink-0 rounded-full border border-amber-200/20 bg-black/20 px-3 py-1 text-[10px] font-semibold text-amber-100/70">
+            {restorationStage.name}
+          </span>
+        </div>
         <div
           className="mt-3 flex gap-2 md:mt-4"
           role="tablist"
