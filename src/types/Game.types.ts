@@ -30,12 +30,6 @@ export type Upgrade = {
   };
 };
 
-// type SavedUpgradeProgress = {
-//   id: number;
-//   owned: number;
-//   costNext: number;
-// };
-
 export type GameState = {
   saveVersion: number;
   hobbits: number;
@@ -68,9 +62,11 @@ export type GameAction =
       type: "MARK_RESTORATION_STAGE_SEEN";
       payload: RestorationStageId;
     }
-  | { type: "CHEAT" }
   | { type: "LOAD_GAME"; payload: GameState }
-  | { type: "RESET" };
+  | { type: "RESET" }
+  | { type: "DEV_ADD_HOBBITS"; payload: number }
+  | { type: "DEV_REMOVE_HOBBITS"; payload: number }
+  | { type: "DEV_ADD_RESTORATION_POINTS"; payload: number };
 
 export type GameContextType = {
   state: GameState;

@@ -67,3 +67,17 @@ export function saveGameToStorage(username: string, gameState: GameState) {
     }),
   );
 }
+
+export function resetGameSave(username: string) {
+  const existingStorage = getStoredUserRecord(username);
+
+  const resetRecord = {
+    name:
+      typeof existingStorage.name === "string" &&
+      existingStorage.name.trim().length > 0
+        ? existingStorage.name
+        : username,
+  };
+
+  localStorage.setItem(username, JSON.stringify(resetRecord));
+}

@@ -120,12 +120,9 @@ export const gameReducer = (
         stageMilestonesSeen: [...state.stageMilestonesSeen, action.payload],
       };
     }
-    // Quick way to add 10,000 hobbits to user
-    case "CHEAT":
-      return { ...state, hobbits: state.hobbits + 10000 };
-    //
+
+    // Parsed data pulled from local storage is added to game state (dispatched from handleLoad onClick function in Options component)
     case "LOAD_GAME":
-      // Parsed data pulled from local storage is added to game state (dispatched from handleLoad onClick function in Options component)
       return {
         ...initialGameState,
         ...action.payload,
@@ -140,6 +137,25 @@ export const gameReducer = (
     // Game data is reset to default game state
     case "RESET":
       return initialGameState;
+    // DEV TOOLS ENABLED BY SETTING VITE_SHOW_DEV_TOOLS TO TRUE
+    // Add hobbits to current count
+    case "DEV_ADD_HOBBITS":
+      return {
+        ...state,
+        hobbits: state.hobbits + action.payload,
+      };
+    // Remove hobbits from current count
+    case "DEV_REMOVE_HOBBITS":
+      return {
+        ...state,
+        hobbits: Math.max(0, state.hobbits - action.payload),
+      };
+    // Increase restoration points for stage progression
+    case "DEV_ADD_RESTORATION_POINTS":
+      return {
+        ...state,
+        restorationPoints: state.restorationPoints + action.payload,
+      };
     default:
       return state;
   }
