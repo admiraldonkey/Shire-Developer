@@ -1,10 +1,15 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { RecruitButton } from "../game/RecruitButton";
 import { useRestorationStage } from "../hooks/UseRestorationStage";
 
 export function MainActionPanel() {
   const restorationStage = useRestorationStage();
   const recruitButtonRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    panelRef.current?.focus({ preventScroll: true });
+  }, []);
 
   function handleMainPanelKeyDown(event: React.KeyboardEvent<HTMLElement>) {
     const target = event.target as HTMLElement;
@@ -22,6 +27,10 @@ export function MainActionPanel() {
     }
 
     if (event.code === "Space") {
+      if (event.repeat) {
+        return;
+      }
+
       event.preventDefault();
       recruitButtonRef.current?.click();
     }
@@ -29,10 +38,11 @@ export function MainActionPanel() {
 
   return (
     <section
+      ref={panelRef}
       tabIndex={0}
       onKeyDown={handleMainPanelKeyDown}
       className={[
-        "min-h-0 min-w-0 flex-1 overflow-hidden rounded-3xl border p-4 shadow-2xl transition-colors duration-700 lg:p-6",
+        "min-h-0 min-w-0 flex-1 overflow-hidden rounded-3xl border p-4 shadow-2xl outline-none transition-colors duration-700 focus-visible:ring-1 focus-visible:ring-amber-200/25 lg:p-6",
         restorationStage.theme.border,
         restorationStage.theme.mainPanelBackground,
       ].join(" ")}
